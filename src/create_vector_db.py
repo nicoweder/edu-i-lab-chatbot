@@ -7,9 +7,9 @@ from openai import OpenAI
 # ===============================
 # Pfade & Einstellungen
 # ===============================
-CHUNKS_DIR = "D:/BAA Code/data/chunks"
+CHUNKS_DIR = "D:/BAA Code/data/chunks_overlap50w"
 FAISS_INDEX_PATH = "D:/BAA Code/data/faiss_index.index"
-OPENAI_API_KEY = "DEIN_OPENAI_API_KEY"  # Setze hier deinen API Key
+OPENAI_API_KEY = "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"  # Setze hier deinen API Key
 
 # OpenAI Client initialisieren
 client = OpenAI(api_key=OPENAI_API_KEY)
@@ -43,11 +43,12 @@ for filename in chunk_files:
 
     # Metadata speichern für spätere Zuordnung
     metadata_list.append({
-        "title": chunk["title"],
-        "url": chunk["url"],
-        "chunk_index": chunk["chunk_index"],
-        "links": chunk.get("links", [])
-    })
+    "title": chunk["title"],
+    "url": chunk["url"],
+    "chunk_index": chunk["chunk_index"],
+    "chunk_text": chunk["chunk_text"],
+    "links": chunk.get("links", [])
+})
 
 print(f"✅ Embeddings für {len(embeddings_list)} Chunks erstellt")
 
