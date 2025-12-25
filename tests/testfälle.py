@@ -2,12 +2,12 @@ import json
 import os
 
 # Verzeichnis, in dem die Testfälle gespeichert werden
-OUTPUT_FILE = os.path.join(os.path.dirname(__file__), "testcases1.json")
+OUTPUT_FILE = os.path.join(os.path.dirname(__file__), "testcases2.json")
 
 # Testfälle für den Chatbot
 
 testcases = [
-    {"ID": "T1", "question": "Wann sind die Stand-Up-Meetings im HS 2025 geplant?", 
+    {"ID": "T1", "question": "Was ist bezüglich der Stand-up meetings im HS 2025 geplant?", 
      "requirements": ["F1", "F2", "F3", "F6"]},    
     {"ID": "T2", "question": "Welche rechtlichen Fragen bestehen bei KI in der Schweiz laut dem Edu-Lab?", 
      "requirements": ["F1", "F2", "F3", "F6"]},

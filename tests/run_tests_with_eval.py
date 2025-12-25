@@ -1,21 +1,37 @@
+import sys
+import os
 import json
 import time
 import csv
-import os
+
+# ===============================
+# Pfade für Imports & Testfälle
+# ===============================
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # tests-Ordner
+SRC_DIR = os.path.join(BASE_DIR, "..", "src")          # src-Ordner
+sys.path.append(SRC_DIR)
+
 from search_and_answer import RAGChatSession, client, index, metadata
 
-# Basisverzeichnis des Projekts
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# ===============================
+# Experiment-Metadaten
+# ===============================
+EXPERIMENT = "chunks_recursive_overl_50"   # Name der Chunking-Strategie
+OVERLAP = 50                             # Überlappung in Wörtern
+PROMPT_USED = "FINAL_PROMPT_2"             # "FINAL_PROMPT_1" oder "FINAL_PROMPT_2"
 
-# Testfälle laden (jetzt im Unterordner "tests")
-TESTFILE = os.path.join(BASE_DIR, "tests", "testcases1.json")
+# ===============================
+# Testfälle laden (liegt direkt im tests-Ordner)
+# ===============================
+TESTFILE = os.path.join(BASE_DIR, "testcases2.json")
 with open(TESTFILE, "r", encoding="utf-8") as f:
     testcases = json.load(f)
 
 print(f"{len(testcases)} Testfälle geladen.\n")
 
-
+# ===============================
 # Gewichtung für Endscore
+# ===============================
 WEIGHTS = {
     "relevance": 0.3,
     "accuracy": 0.25,
@@ -24,10 +40,11 @@ WEIGHTS = {
     "response_time": 0.15
 }
 
+# ===============================
+# Hilfsfunktionen
+# ===============================
 def evaluate_manual_input(prompt):
-    """
-    Fragt den Nutzer nach einem Score von 1 bis 5.
-    """
+    """Fragt den Nutzer nach einem Score von 1 bis 5."""
     while True:
         try:
             value = int(input(prompt))
@@ -40,7 +57,7 @@ def evaluate_manual_input(prompt):
 def compute_endscore(scores, duration):
     """
     Berechnet den Endscore gemäß Gewichtung.
-    Die Antwortzeit wird invertiert gewertet: <2s = 5, 2-5s = 4, 5-10s =3, >10s=1
+    Antwortzeit wird invertiert gewertet: <2s=5, 2-5s=4, 5-10s=3, >10s=1
     """
     if duration < 2:
         rt_score = 5
@@ -52,14 +69,18 @@ def compute_endscore(scores, duration):
         rt_score = 1
 
     scores["response_time"] = rt_score
-
     endscore = sum(scores[k] * WEIGHTS[k] for k in WEIGHTS)
     return round(endscore, 2)
 
+# ===============================
 # RAG Chat Session initialisieren
+# ===============================
 session = RAGChatSession(client, index, metadata, top_k=5)
 results = []
 
+# ===============================
+# Tests ausführen
+# ===============================
 for idx, testcase in enumerate(testcases):
     frage = testcase["question"]
     print(f"\n({idx+1}/{len(testcases)}) Testfall {testcase['ID']}: {frage}")
@@ -93,6 +114,7 @@ for idx, testcase in enumerate(testcases):
     }
     endscore = compute_endscore(scores, duration)
 
+    # Ergebnisse inklusive Experiment-Metadaten speichern
     results.append({
         "ID": testcase["ID"],
         "frage": frage,
@@ -100,15 +122,28 @@ for idx, testcase in enumerate(testcases):
         "quellen": res.get("inline_sources", []),
         "dauer_s": duration,
         "bewertung": scores,
-        "endscore": endscore
+        "endscore": endscore,
+        "experiment": EXPERIMENT,
+        "overlap": OVERLAP,
+        "prompt": PROMPT_USED
     })
 
     print(f"→ Dauer: {duration}s | Endscore: {endscore}\n")
 
+# ===============================
 # Ergebnisse speichern
-RESULT_JSON = os.path.join(BASE_DIR, "test_results_manual.json")
-RESULT_CSV = os.path.join(BASE_DIR, "test_results_manual.csv")
+# ===============================
+# Ordner für Ergebnisse
+RESULTS_DIR = os.path.join(BASE_DIR, "results")
+os.makedirs(RESULTS_DIR, exist_ok=True)
 
+# Dateinamen mit Metadaten
+RESULT_JSON = os.path.join(
+    RESULTS_DIR, f"test_results_{EXPERIMENT}_over{OVERLAP}_{PROMPT_USED}.json"
+)
+RESULT_CSV = os.path.join(
+    RESULTS_DIR, f"test_results_{EXPERIMENT}_over{OVERLAP}_{PROMPT_USED}.csv"
+)
 # JSON speichern
 with open(RESULT_JSON, "w", encoding="utf-8") as f:
     json.dump(results, f, indent=2, ensure_ascii=False)
@@ -118,7 +153,8 @@ with open(RESULT_CSV, "w", encoding="utf-8", newline="") as f:
     writer = csv.writer(f)
     writer.writerow([
         "ID", "Frage", "Antwort", "Quellen", "Antwortzeit (s)",
-        "Relevance", "Clarity", "Accuracy", "Sources", "Endscore"
+        "Relevance", "Clarity", "Accuracy", "Sources", "Endscore",
+        "Experiment", "Overlap", "Prompt"
     ])
     for r in results:
         src_titles = "; ".join([s.get("title", "") for s in r["quellen"]])
@@ -132,7 +168,10 @@ with open(RESULT_CSV, "w", encoding="utf-8", newline="") as f:
             r["bewertung"]["clarity"],
             r["bewertung"]["accuracy"],
             r["bewertung"]["sources"],
-            r["endscore"]
+            r["endscore"],
+            r["experiment"],
+            r["overlap"],
+            r["prompt"]
         ])
 
 print(f"\nAlle Testfälle bearbeitet. Ergebnisse gespeichert in {RESULT_JSON} und {RESULT_CSV}.")

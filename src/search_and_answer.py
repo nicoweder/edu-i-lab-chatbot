@@ -8,6 +8,8 @@ import pickle
 import time
 import logging
 
+from prompts import FINAL_PROMPT_1, FINAL_PROMPT_2  # Die beiden finalen Prompt-Varianten
+
 # Logging konfigurieren
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
@@ -42,7 +44,7 @@ with open(METADATA_PATH, "rb") as f:
 logging.info(f"✅ Index und Metadaten geladen ({len(metadata)} Einträge)")
 
 class RAGChatSession:
-    def __init__(self, client, index, metadata, top_k=5, max_messages=30, context_char_limit=4000):
+    def __init__(self, client, index, metadata, top_k=5, max_messages=30, context_char_limit=4000, final_prompt_variant=1):
         self.client = client
         self.index = index
         self.metadata = metadata
@@ -54,6 +56,7 @@ class RAGChatSession:
         self.start_time = time.time()
         self.max_messages = max_messages
         self.context_char_limit = context_char_limit
+        self.final_prompt_variant = 2
 
     def reset(self):
         self.history = []
@@ -106,7 +109,6 @@ class RAGChatSession:
             for link in r.get("links", []):
                 all_links.append({"anchor": link["anchor"], "url": link["href"]})
         context_text = "\n".join(context_blocks)
-        # Kontext begrenzen, um Token-Limits zu vermeiden
         if len(context_text) > self.context_char_limit:
             context_text = context_text[-self.context_char_limit:]
         return context_text, all_links
@@ -133,10 +135,7 @@ class RAGChatSession:
         last_context = getattr(self, "last_context", "")
         all_links = getattr(self, "last_all_links", [])
 
-        logging.debug(f"Chatverlauf: {history_text}")
-        logging.debug(f"Letzter Kontext: {last_context}")
-        logging.debug(f"Letzte Links: {json.dumps(all_links, ensure_ascii=False)}")
-
+        # Überprüfung, ob die Frage aus Chatverlauf + Kontext beantwortbar ist
         prompt_check = f"""
 Du bist ein faktenbasierter Chatbot für den Edu-I Lab Blog der Hochschule Luzern.
 Prüfe, ob die folgende Frage aus dem bisherigen Chatverlauf und dem letzten Kontext beantwortbar ist.
@@ -166,32 +165,15 @@ Wenn nicht: Antworte exakt: "NICHT BEANTWORTBAR"
             all_links = getattr(self, "last_all_links", [])
             return_sources = True
 
-        prompt_final = f"""
-Du bist ein faktenbasierter Chatbot für den Edu-I Lab Blog der Hochschule Luzern.
-Nutze den Chatverlauf unten und ggf. den Kontext aus Retrieval, um die Frage zu beantworten.
+        # Auswahl des finalen Prompts
+        final_prompt_template = FINAL_PROMPT_1 if self.final_prompt_variant == 1 else FINAL_PROMPT_2
+        prompt_final = final_prompt_template.format(
+            history_text=history_text,
+            query=query,
+            context=context,
+            links_json=json.dumps(all_links, ensure_ascii=False)
+        )
 
-Chatverlauf:
-{history_text}
-
-Aktuelle Frage:
-{query}
-
-Kontext:
-{context}
-
-Verfügbare Links als Belege:
-{json.dumps(all_links, ensure_ascii=False)}
-
-Regeln:
-1. Wenn die Antwort nicht eindeutig aus dem Verlauf + Links oder Kontext ableitbar ist, schreibe:
-"Keine Information im vorhandenen Kontext."
-2. Verwende pro relevanter Aussage eine Inline-Quelle im Format:
-[Titel_des_Artikels]
-3. Keine Erfindungen, keine Vermutungen.
-4. Schreib kurz und präzise.
-5. Gib die Antwort in der selben Sprache wie die Frage zurück.
-6. Gib NUR die Antwort mit Inline-Quellen.
-"""
         answer = self.safe_chat_completion(prompt_final, temperature=0.1)
 
         self.history.append({"user": query, "assistant": answer})
@@ -202,7 +184,7 @@ Regeln:
 
 # Beispielnutzung der Session im Terminal
 if __name__ == "__main__":
-    session = RAGChatSession(client, index, metadata)
+    session = RAGChatSession(client, index, metadata, final_prompt_variant=1)
 
     while True:
         query = input("Frage: ")
