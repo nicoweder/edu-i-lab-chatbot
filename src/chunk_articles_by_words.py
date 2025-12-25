@@ -5,11 +5,11 @@ import json
 # Pfade & Einstellungen
 # ===============================
 INPUT_DIR = "D:/BAA Code/data/clean_articles" # Bereinigte Artikel
-OUTPUT_DIR = "D:/BAA Code/data/chunks"        # Speicherort für Chunks
+OUTPUT_DIR = "D:/BAA Code/data/chunks_words_50"        # Speicherort für Chunks
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 CHUNK_SIZE = 300   # Wörter pro Chunk
-CHUNK_OVERLAP = 30 # Wörter Überlappung
+CHUNK_OVERLAP = 50 # Wörter Überlappung
 
 # ===============================
 # Text in Wort-Chunks aufteilen

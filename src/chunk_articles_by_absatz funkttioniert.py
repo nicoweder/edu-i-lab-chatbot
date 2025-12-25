@@ -6,12 +6,12 @@ import time
 # Pfade & Einstellungen
 # ===============================
 INPUT_DIR = "D:/BAA Code/data/clean_articles"
-OUTPUT_DIR = "D:/BAA Code/data/chunks_no_overlap"
+OUTPUT_DIR = "D:/BAA Code/data/chunks_paragraph_100"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 MIN_WORDS = 50
 MAX_WORDS = 400
-OVERLAP_WORDS = 0  # Überlappung in Wörtern zwischen den Chunks
+OVERLAP_WORDS = 100  # Überlappung in Wörtern zwischen den Chunks
 
 # ===============================
 # Funktion: Artikel in Absatz-Chunks splitten
