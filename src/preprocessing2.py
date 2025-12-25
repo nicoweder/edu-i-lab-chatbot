@@ -3,18 +3,18 @@ import json
 from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
 from bs4 import BeautifulSoup
 
-# ===============================
-# Pfade
-# ===============================
-INPUT_DIR = "D:/BAA Code/data/articles_json"   # Originalartikel
-OUTPUT_DIR = "D:/BAA Code/data/clean_articles" # Bereinigte Artikel
+# Basisverzeichnis des Projekts
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Eingabe- und Ausgabeordner relativ zum Projektverzeichnis
+INPUT_DIR = os.path.join(BASE_DIR, "data", "articles_json")    # Originalartikel
+OUTPUT_DIR = os.path.join(BASE_DIR, "data", "clean_articles")  # Bereinigte Artikel
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-# ===============================
-# URL Normalisierung
-# ===============================
 def normalize_url(url):
-    """Entfernt Tracking-Parameter (utm_*) und trailing slashes aus URLs"""
+    """
+    Entfernt Tracking-Parameter (utm_*) und trailing slashes aus URLs.
+    """
     try:
         p = urlparse(url)
         qs = [(k, v) for k, v in parse_qsl(p.query) if not k.lower().startswith("utm_")]
@@ -24,17 +24,16 @@ def normalize_url(url):
     except Exception:
         return url
 
-# ===============================
-# HTML Bereinigung & Linkextraktion
-# ===============================
 def clean_html_and_extract_links(html):
-    """Entfernt HTML, wandelt <p> & <br> in Absatztrennungen um, extrahiert Links."""
+    """
+    Entfernt HTML, wandelt <p> und <br> in Absatztrennungen um und extrahiert Links.
+    """
     if not html or not isinstance(html, str):
         return "", []
 
     soup = BeautifulSoup(html, "html.parser")
 
-    # <img>-Tags entfernen (irrelevant)
+    # <img>-Tags entfernen
     for img in soup.find_all("img"):
         img.decompose()
 
@@ -49,28 +48,30 @@ def clean_html_and_extract_links(html):
                 "anchor": anchor or None
             })
 
-    # <br> → \n\n (neue Zeile)
+    # <br> → \n\n
     for br in soup.find_all("br"):
         br.replace_with("\n\n")
 
-    # <p> → \n\n (neuer Absatz)
+    # <p> → \n\n
     for p in soup.find_all("p"):
         p.insert_before("\n\n")
 
     # Gesamten Text extrahieren
     clean_text = soup.get_text(separator=" ", strip=True)
-
-    # Überflüssige Leerzeichen nach Zeilenumbrüchen entfernen
     clean_text = clean_text.replace("\n \n", "\n\n").strip()
 
     return clean_text, links
 
-# ===============================
-# Hauptverarbeitung
-# ===============================
 def process_articles():
+    """
+    Verarbeitet alle Artikel im Eingabeverzeichnis:
+    - HTML bereinigen
+    - Links extrahieren
+    - Sehr kurze Artikel überspringen
+    - Bereinigte Artikel als JSON speichern
+    """
     files = [f for f in os.listdir(INPUT_DIR) if f.endswith(".json")]
-    print(f"🔍 Starte Bereinigung von {len(files)} Artikeln...\n")
+    print(f"Starte Bereinigung von {len(files)} Artikeln...\n")
 
     skipped = 0
     saved = 0
@@ -83,45 +84,36 @@ def process_articles():
 
         content = article.get("content", "")
         if not content or not isinstance(content, str):
-            print(f"⚠️  Überspringe leeren Artikel: {filename}")
+            print(f"Überspringe leeren Artikel: {filename}")
             skipped += 1
             continue
 
-        # Text & Links extrahieren
         clean_text, links = clean_html_and_extract_links(content)
 
-        # Wortanzahl berechnen
         word_count = len(clean_text.split())
-
-        # Sehr kurze Artikel (unter 30 Wörter) überspringen
         if word_count < 30:
-            print(f"⚠️  Überspringe zu kurzen Artikel ({word_count} Wörter): {filename}")
+            print(f"Überspringe zu kurzen Artikel ({word_count} Wörter): {filename}")
             skipped += 1
             continue
 
-        # Neues JSON mit bereinigtem Inhalt & Metadaten
         cleaned_article = {
             "title": article.get("title", ""),
             "url": normalize_url(article.get("url", "")),
             "author": article.get("author", ""),
             "pub_date": article.get("pub_date", ""),
             "content": clean_text,
-            "links": links  # Liste mit {href, anchor}
+            "links": links
         }
 
-        # Neue Datei speichern
         output_path = os.path.join(OUTPUT_DIR, filename)
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(cleaned_article, f, ensure_ascii=False, indent=4)
 
         saved += 1
-        print(f"✅ Gespeichert: {filename} ({word_count} Wörter)")
+        print(f"Gespeichert: {filename} ({word_count} Wörter)")
 
-    print(f"\n✅ Fertig! {saved} Artikel bereinigt und gespeichert.")
-    print(f"🗑️  {skipped} Artikel wurden übersprungen (leer oder <30 Wörter).")
+    print(f"\nFertig! {saved} Artikel bereinigt und gespeichert.")
+    print(f"{skipped} Artikel wurden übersprungen (leer oder <30 Wörter).")
 
-# ===============================
-# Einstiegspunkt
-# ===============================
 if __name__ == "__main__":
     process_articles()

@@ -3,39 +3,38 @@ import json
 import time
 import re
 
-# ===============================
-# Einstellungen
-# ===============================
-INPUT_DIR = "D:/BAA Code/data/clean_articles"
-OUTPUT_DIR = "D:/BAA Code/data/chunks_recursive_no_overlap"
+# Basisverzeichnis des Projekts
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Eingabe- und Ausgabeordner relativ zum Projektverzeichnis
+INPUT_DIR = os.path.join(BASE_DIR, "data", "clean_articles")
+OUTPUT_DIR = os.path.join(BASE_DIR, "data", "chunks", "chunks_recursive_overl_30")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 MIN_WORDS = 50
 MAX_WORDS = 400
-OVERLAP_WORDS = 0  # 0 / 50 / 100 für Experimente
-
-
-# ===============================
-# Hilfsfunktionen
-# ===============================
+OVERLAP_WORDS = 30  
 
 def count_words(text):
+    """
+    Zählt die Wörter eines Textes.
+    """
     return len(text.split())
 
-
 def split_into_sentences(text):
-    # einfache, robuste Satztrennung
+    """
+    Trennt Text in Sätze basierend auf Punkt, Ausrufe- und Fragezeichen.
+    """
     return re.split(r'(?<=[.!?])\s+', text)
-
 
 def recursive_split(text, max_words):
     """
-    Zerlegt Text rekursiv in semantisch sinnvolle Chunks
+    Zerlegt Text rekursiv in semantisch sinnvolle Chunks.
+    Zuerst auf Absatz-, dann Satz-, und schließlich Wortebene.
     """
     if count_words(text) <= max_words:
         return [text]
 
-    # 1️⃣ Erst Absatzebene
     paragraphs = [p.strip() for p in text.split("\n\n") if p.strip()]
     if len(paragraphs) > 1:
         chunks = []
@@ -55,7 +54,6 @@ def recursive_split(text, max_words):
 
         return chunks
 
-    # 2️⃣ Satzebene
     sentences = split_into_sentences(text)
     if len(sentences) > 1:
         chunks = []
@@ -75,16 +73,13 @@ def recursive_split(text, max_words):
 
         return chunks
 
-    # 3️⃣ Fallback: Wortweise splitten
     words = text.split()
-    chunks = []
-    for i in range(0, len(words), max_words):
-        chunks.append(" ".join(words[i:i + max_words]))
-
-    return chunks
-
+    return [" ".join(words[i:i + max_words]) for i in range(0, len(words), max_words)]
 
 def apply_overlap(chunks, overlap_words):
+    """
+    Fügt den Chunks eine Überlappung von Wörtern hinzu.
+    """
     if overlap_words <= 0:
         return chunks
 
@@ -95,16 +90,14 @@ def apply_overlap(chunks, overlap_words):
         words = chunk.split()
         merged = prev_tail + words
         overlapped.append(" ".join(merged))
-
-        prev_tail = words[-overlap_words:]
+        prev_tail = words[-overlap_words:] if overlap_words <= len(words) else words
 
     return overlapped
 
-
-# ===============================
-# Haupt-Chunking-Funktion
-# ===============================
 def chunk_article_recursive(title, url, author, pub_date, content, links, filename):
+    """
+    Teilt einen Artikel rekursiv in Chunks und speichert diese als JSON-Dateien.
+    """
     all_chunks = recursive_split(content, MAX_WORDS)
     all_chunks = apply_overlap(all_chunks, OVERLAP_WORDS)
 
@@ -130,15 +123,13 @@ def chunk_article_recursive(title, url, author, pub_date, content, links, filena
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(chunk_data, f, ensure_ascii=False, indent=4)
 
-        print(f"📄 Chunk {idx} erstellt ({count_words(chunk_text)} Wörter)")
-
+        print(f"Chunk {idx} erstellt ({count_words(chunk_text)} Wörter)")
         time.sleep(0.05)
 
-
-# ===============================
-# Batch-Verarbeitung
-# ===============================
 def process_all_articles():
+    """
+    Verarbeitet alle Artikel im Eingabeverzeichnis und chunked sie rekursiv.
+    """
     files = [f for f in os.listdir(INPUT_DIR) if f.endswith(".json")]
 
     for filename in files:
@@ -147,7 +138,7 @@ def process_all_articles():
 
         content = article.get("content", "")
         if not content.strip():
-            print(f"⚠️  Überspringe leeren Artikel: {filename}")
+            print(f"Überspringe leeren Artikel: {filename}")
             continue
 
         chunk_article_recursive(
@@ -160,13 +151,9 @@ def process_all_articles():
             filename=filename
         )
 
-        print(f"✅ {filename} verarbeitet\n")
+        print(f"{filename} verarbeitet\n")
 
-    print("🎯 Alle Artikel wurden rekursiv gechunked.")
+    print("Alle Artikel wurden rekursiv gechunked.")
 
-
-# ===============================
-# Einstiegspunkt
-# ===============================
 if __name__ == "__main__":
     process_all_articles()

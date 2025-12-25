@@ -13,18 +13,33 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 
 # .env laden
 load_dotenv()
-BASE_DIR = "D:/BAA Code/data"
-INDEX_PATH = os.path.join(BASE_DIR, "faiss_index.index")
-METADATA_PATH = os.path.join(BASE_DIR, "faiss_metadata.pkl")
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Basisverzeichnis relativ zum aktuellen Script
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Experiment auswählen
+EXPERIMENT = "chunks_recursive_overl_50"  # <- hier das gewünschte Experiment ändern
+
+# Pfade zu Index und Metadaten
+INDEX_DIR = os.path.join(BASE_DIR, "data", "indices", EXPERIMENT)
+INDEX_PATH = os.path.join(INDEX_DIR, "faiss.index")
+METADATA_PATH = os.path.join(INDEX_DIR, "metadata.pkl")
+
+# OpenAI Client initialisieren
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+if not OPENAI_API_KEY:
+    raise ValueError("OPENAI_API_KEY nicht gesetzt (.env fehlt?)")
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 # FAISS Index und Metadaten laden
-logging.info("Lade FAISS Index und Metadaten...")
+logging.info(f"Lade FAISS Index aus {INDEX_PATH} ...")
 index = faiss.read_index(INDEX_PATH)
+
+logging.info(f"Lade Metadaten aus {METADATA_PATH} ...")
 with open(METADATA_PATH, "rb") as f:
     metadata = pickle.load(f)
-logging.info(f"Index und {len(metadata)} Metadaten-Einträge geladen.")
+
+logging.info(f"✅ Index und Metadaten geladen ({len(metadata)} Einträge)")
 
 class RAGChatSession:
     def __init__(self, client, index, metadata, top_k=5, max_messages=30, context_char_limit=4000):

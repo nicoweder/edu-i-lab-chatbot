@@ -2,27 +2,30 @@ import os
 import json
 import time
 
-# ===============================
-# Pfade & Einstellungen
-# ===============================
-INPUT_DIR = "D:/BAA Code/data/clean_articles"
-OUTPUT_DIR = "D:/BAA Code/data/chunks_no_overlap"
+# Basisverzeichnis des Projekts ermitteln
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Eingabe- und Ausgabeordner relativ zum Projektverzeichnis
+INPUT_DIR = os.path.join(BASE_DIR, "data", "clean_articles")
+OUTPUT_DIR = os.path.join(BASE_DIR, "data", "chunks", "chunks_paragraph_120")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 MIN_WORDS = 50
 MAX_WORDS = 400
-OVERLAP_WORDS = 1  # anstelle von Absatz-Überlappung
+OVERLAP_WORDS = 120  # Überlappung in Wörtern zwischen den Chunks
 
-# ===============================
-# Funktion: Artikel in Absatz-Chunks splitten
-# ===============================
 def chunk_article(title, url, author, pub_date, content, links, filename):
+    """
+    Teilt einen Artikel in Chunks basierend auf Absätzen auf.
+    Jeder Chunk enthält mindestens MIN_WORDS Wörter und höchstens MAX_WORDS.
+    Überlappung von OVERLAP_WORDS wird zwischen den Chunks berücksichtigt.
+    """
     paragraphs = [p.strip() for p in content.split("\n\n") if p.strip()]
     total_paragraphs = len(paragraphs)
-
-    # Sonderfall: Artikel nur 1 Absatz oder sehr kurz
     total_words = len(content.split())
-    if total_paragraphs == 1 or total_words <= MAX_WORDS:
+
+    # Sonderfall: Artikel kurz genug für einen einzigen Chunk
+    if total_words <= MAX_WORDS:
         chunk_data = {
             "title": title,
             "url": url,
@@ -36,20 +39,21 @@ def chunk_article(title, url, author, pub_date, content, links, filename):
         output_path = os.path.join(OUTPUT_DIR, output_file)
         with open(output_path, "w", encoding="utf-8") as f_out:
             json.dump(chunk_data, f_out, ensure_ascii=False, indent=4)
-        print(f"📄 Chunk 1 erstellt ({total_words} Wörter, {total_paragraphs} Absätze)")
-        time.sleep(1)
+        print(f"Chunk 1 erstellt ({total_words} Wörter, {total_paragraphs} Absätze)")
+        time.sleep(0.1)
         return
 
-    # Normales Chunking für mehrere Absätze
+    # Normales Chunking
     chunk_index = 1
     i = 0
-    prev_chunk_last_words = ""
+    prev_chunk_last_words = []
 
     while i < total_paragraphs:
         chunk_paragraphs = []
         word_count = 0
         j = i
 
+        # Absätze sammeln bis MIN_WORDS erreicht sind
         while j < total_paragraphs and word_count < MIN_WORDS:
             para_words = len(paragraphs[j].split())
             chunk_paragraphs.append(paragraphs[j])
@@ -58,18 +62,11 @@ def chunk_article(title, url, author, pub_date, content, links, filename):
 
         chunk_text = "\n\n".join(chunk_paragraphs)
 
-        # 🔁 Überlappung: letzten 50 Wörter vom vorherigen Chunk hinzufügen
+        # Überlappung vom vorherigen Chunk vorne hinzufügen
         if prev_chunk_last_words:
-            chunk_text = prev_chunk_last_words + "\n\n" + chunk_text
+            chunk_text = " ".join(prev_chunk_last_words + chunk_text.split())
 
-        # Update für nächsten Chunk: letzten 50 Wörter speichern
-        chunk_words = chunk_text.split()
-        if len(chunk_words) > OVERLAP_WORDS:
-            prev_chunk_last_words = " ".join(chunk_words[-OVERLAP_WORDS:])
-        else:
-            prev_chunk_last_words = chunk_text
-
-        # Links auf Chunk beziehen
+        # Links, die im Chunk vorkommen
         chunk_links = [link for link in links if link.get("anchor") and link["anchor"] in chunk_text]
 
         chunk_data = {
@@ -87,17 +84,19 @@ def chunk_article(title, url, author, pub_date, content, links, filename):
         with open(output_path, "w", encoding="utf-8") as f_out:
             json.dump(chunk_data, f_out, ensure_ascii=False, indent=4)
 
-        print(f"📄 Chunk {chunk_index} erstellt ({word_count} Wörter, {len(chunk_paragraphs)} Absätze)")
+        print(f"Chunk {chunk_index} erstellt ({len(chunk_text.split())} Wörter, {len(chunk_paragraphs)} Absätze)")
+
+        # Letzte Wörter für Überlappung merken
+        prev_chunk_last_words = chunk_text.split()[-OVERLAP_WORDS:] if OVERLAP_WORDS > 0 else []
+
         chunk_index += 1
-
-        # Nächster Start-Index (kein Absatz-Overlap mehr!)
         i = j
-      
+        time.sleep(0.1)
 
-# ===============================
-# Hauptverarbeitung
-# ===============================
 def process_all_articles():
+    """
+    Lädt alle Artikel im INPUT_DIR, teilt sie in Chunks und speichert diese im OUTPUT_DIR.
+    """
     files = [f for f in os.listdir(INPUT_DIR) if f.endswith(".json")]
     for filename in files:
         file_path = os.path.join(INPUT_DIR, filename)
@@ -106,7 +105,7 @@ def process_all_articles():
 
         content = article.get("content", "")
         if not content.strip():
-            print(f"⚠️  Überspringe leeren Artikel: {filename}")
+            print(f"Überspringe leeren Artikel: {filename}")
             continue
 
         chunk_article(
@@ -119,12 +118,9 @@ def process_all_articles():
             filename=filename
         )
 
-        print(f"✅ {filename} vollständig verarbeitet\n")
+        print(f"{filename} vollständig verarbeitet")
 
-    print("\n🎯 Alle Artikel wurden erfolgreich in Chunks aufgeteilt.")
+    print("Alle Artikel wurden erfolgreich in Chunks aufgeteilt.")
 
-# ===============================
-# Einstiegspunkt
-# ===============================
 if __name__ == "__main__":
     process_all_articles()
