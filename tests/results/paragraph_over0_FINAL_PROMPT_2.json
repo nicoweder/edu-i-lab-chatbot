@@ -1,0 +1,359 @@
+[
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "Was ist für die Stand-up meetings im HS 2025 geplant?",
+    "answer": "Die Stand-up Meetings für das Herbstsemester 2025 sind geplant mit verschiedenen Themen und Moderatoren. Zum Beispiel findet am 19. September ein Meeting zum Thema \"Merkblatt KI und Recht\" statt, moderiert von David Loher [Vorläufige Agenda Stand-Ups HS 2025].",
+    "response_time": 1.8,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 5,
+    "endscore": 5.0,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "Welche rechtlichen Fragen bestehen bei KI in der Schweiz laut dem Edu-Lab?",
+    "answer": "In der Schweiz bestehen bei der Nutzung von KI rechtliche Fragen, die sich auf die Anwendung bestehender, technologieneutral formulierter Gesetze beziehen. Es wird davon ausgegangen, dass keine neuen Gesetze erforderlich sind, sondern dass die bestehenden Gesetze auf neue Möglichkeiten und Fälle angewendet werden müssen. Die KI-Konvention des Europarats, der die Schweiz angehört, stellt ethische Grundwerte wie Menschenrechte, Demokratie und Rechtsstaatlichkeit in den Mittelpunkt [Wo beginnt eigentlich KI – und braucht die Schweiz neue Gesetze?].",
+    "response_time": 2.51,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "wird hier auch auf den Eu Act eingangen?",
+    "answer": "Ja, der EU AI Act wird im Kontext der Regulierung von KI im Hochschulbereich erwähnt. Er betrifft auch die Schweiz, insbesondere wenn Schweizer Unternehmen oder Hochschulen im EU/EWR-Raum tätig sind oder deren KI-Produkte dort angeboten werden [Wo beginnt eigentlich KI – und braucht die Schweiz neue Gesetze?].",
+    "response_time": 1.99,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 5,
+    "endscore": 5.0,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "was sind die Schwerpunkte dieses blogs",
+    "answer": "Die Schwerpunkte des Edu-I Lab Blogs der Hochschule Luzern liegen auf der Diskussion von Themen wie der Organisation und Bewertung von Gruppenarbeiten, der Problematik des Freeridings, der Nutzung von KI als didaktisches Werkzeug zur Unterstützung nachhaltigen Lernens und der rechtlichen Fragen im Zusammenhang mit KI in der Schweiz [Studierenden stören sich nicht zwingend an zu vielen Zusammenarbeiten – aber an der Gesamtnote für eine Gruppe] [KI als didaktisches Werkzeug: Automatisierte Anki-Karten] [Wo beginnt eigentlich KI – und braucht die Schweiz neue Gesetze?].",
+    "response_time": 3.1,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 1
+    },
+    "response_time_score": 4,
+    "endscore": 4.25,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "Wann war die letzte US-Wahl",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 2.24,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "Um was ging es beim Stand-Up-Meeting vom 2. Mai 2023 FS?",
+    "answer": "Am Stand-Up-Meeting vom 2. Mai 2023 im Frühjahrssemester ging es um \"Flexibilität mit Video-Inputs\", präsentiert von Florian Wamser [Programm FS 2023].",
+    "response_time": 2.78,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "Gibt es einen Beitrag zu Plagiatsoftware?",
+    "answer": "Ja, es gibt einen Beitrag zu Plagiatsoftware. Am Stand-Up Meeting am 16. April 2025 wurde das Thema \"Plagiatssoftware - Live-Demo und Beispiele\" mit Nino Ricchizzi behandelt. Dabei wurden Unsicherheiten im Umgang mit unterschiedlichen Plagiatsformen und Fragen zur Anwendung der institutionellen Plagiatssoftware diskutiert [Was gilt als Plagiat? Richtlinien im Realitätstest der HSLU I].",
+    "response_time": 2.74,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "Was ist ein Plagiat?",
+    "answer": "Ein Plagiat ist das unrechtmäßige Übernehmen von Texten, Ideen oder anderen geistigen Schöpfungen ohne angemessene Kennzeichnung der Quelle. Es kann sich um bewusstes oder unbewusstes Fehlverhalten handeln und betrifft sowohl kürzere Stellen als auch längere, zusammenhängende Abschnitte oder ganze Arbeiten [Was gilt als Plagiat? Richtlinien im Realitätstest der HSLU I].",
+    "response_time": 2.61,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "Gibt es Informationen zu den Modulendprüfungen auf dem Blog?",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 2.44,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "Welche neuen Werte oder Kompetenzen erwartet das Edu-Lab in KI-gestützter Lehre?",
+    "answer": "Das Edu-Lab erwartet in der KI-gestützten Lehre, dass Studierende methodisches Wissen aufbauen, um KI-Tools effektiv zu nutzen. Dazu gehört das Formulieren guter Prompts, das Definieren von Formaten und Rollen in Anfragen sowie das kritische und zielführende Interpretieren der erhaltenen Antworten [KI in der Hochschullehre: Integration statt Experimentieren]. Zudem wird eine Kultur des Ausprobierens gefördert, um Anreize zu schaffen, KI-Tools zu testen und Erfahrungen zu teilen [KI in der Hochschullehre: Integration statt Experimentieren].",
+    "response_time": 2.86,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 3
+    },
+    "response_time_score": 4,
+    "endscore": 4.55,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "Are there any survey results on here?",
+    "answer": "Ja, es gibt Umfrageergebnisse. Eine qualitative Umfrage mit dem Titel «Hybrid: wo stehen wir?» wurde von November bis Januar 2023/24 durchgeführt. In dieser Umfrage wurden acht Dozierende in leitfadengestützten Interviews befragt, um verschiedene Perspektiven aus den Studiengängen abzudecken. Die Ergebnisse wurden in sieben Themengruppen zusammengefasst [Neue Lehrformate, neue Werte: Wie Hybridunterricht die Hochschule und Studierendenkultur verändert].",
+    "response_time": 2.47,
+    "scores": {
+      "relevance": 5,
+      "clarity": 3,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.55,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "Um was geht es in den Experimentiermodulen",
+    "answer": "Die Experimentiermodule sind thematisch offen und bieten die Möglichkeit, neue Lehrformate, Inhalte, Technologien oder didaktische Konzepte zu testen. Pro Semester werden drei Module von einer Jury ausgewählt und mit Stunden-Vouchers vergütet. Die Module sind als Experimente gekennzeichnet und werden am Ende des Semesters in einer Feedbackrunde mit den Studierenden diskutiert [Aufruf Experimentiermodule HS 2023].",
+    "response_time": 3.02,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "Wie wird im Edu-I Lab Wissensaustausch zwischen Dozierenden organisiert?",
+    "answer": "Der Wissensaustausch zwischen Dozierenden im Edu-I Lab wird durch Peer-Exchanges organisiert. Diese ermöglichen es den Dozierenden, Ideen und Reflexionen in der Gruppe auszutauschen, um gute Ideen für die Lehre zu entwickeln. Peer-Exchanges können unterschiedliche Formen annehmen und sollen auf individuelle Stärken der Dozierenden eingehen. Ziel ist es, den Austausch attraktiver zu machen und die Organisation von Peer-Tandems zu erleichtern [Im Peer-Exchanges gute Ideen für die Lehre entwickeln (Stand-Up-Review, 24. April)].",
+    "response_time": 4.45,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "Welche didaktischen Herausforderungen entstehen durch KI?",
+    "answer": "Die didaktischen Herausforderungen durch KI umfassen die Notwendigkeit, methodisches Wissen aufzubauen, um KI-Tools effektiv zu nutzen. Dazu gehört das Formulieren guter Prompts, das Definieren von Formaten und Rollen in Anfragen sowie das kritische und zielführende Interpretieren der erhaltenen Antworten. Zudem besteht die Herausforderung, KI-Kompetenzen zu vermitteln, ohne Redundanzen zu schaffen, da unterschiedliche Dozierende ähnliche Inhalte unterrichten könnten [HSLU I Dozierende nutzen KI oft - und für ganz unterschiedliche Zwecke].",
+    "response_time": 3.11,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "Welche Blockchain-Projekte hat das Edu-Lab durchgeführt?",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 1.66,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 5,
+    "endscore": 5.0,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "was kannst du mir zum AI Thesis Coach erzählen?",
+    "answer": "Der AI Thesis Coach ist ein Thema, das am 15. Mai 2024 in einem Stand-Up-Meeting für Dozierende behandelt wurde. Yves Zumbühl präsentierte den AI Thesis Coach, und die Sitzung wurde von Andreas Marfurt moderiert [Stand-Up-Meetings FS 2024]. Weitere spezifische Informationen zum AI Thesis Coach sind im vorhandenen Kontext nicht verfügbar.",
+    "response_time": 2.68,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 3,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.35,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "Wer ist Bundesrat der Schweiz?",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 1.58,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 5,
+    "endscore": 5.0,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "Are there some discussions about ChatGPT on the blog?",
+    "answer": "Ja, es gibt Diskussionen über ChatGPT auf dem Blog. Es wird thematisiert, dass es keine einfachen Rezepte für den Einsatz von KI in der Lehre gibt und dass Prüfungsdesign und Evaluationskriterien überdacht werden müssen [Es gibt sie noch nicht die einfachen Rezepte für 'KI in der Lehre': Ein Zwischenfazit Januar 2024]. Zudem wird der interaktive Einsatz von ChatGPT in der Lehre und die Verschiebung der Rolle der Dozierenden hin zur Beantwortung und Diskussion komplexerer Fragen diskutiert [ChatGPT: Mit dem eigenen Vokabular und Wissensniveau Fragen stellen].",
+    "response_time": 3.37,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "Welche personenbezogenen Daten von Studierenden werden im Edu-Lab gespeichert?",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 2.24,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "Wann beginnt das Frühlingssemester 2026?",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 1.39,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 5,
+    "endscore": 5.0,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "f9d9fb6d-72f0-4085-bbe1-ddbd72c1af97",
+    "question": "dwad hgfdf dsfa",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 2.3,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_no_overlap",
+    "overlap": 0,
+    "prompt_used": "FINAL_PROMPT_2"
+  }
+]

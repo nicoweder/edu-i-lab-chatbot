@@ -1,0 +1,359 @@
+[
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "Was ist für die Stand-up meetings im HS 2025 geplant?",
+    "answer": "Für die Stand-up Meetings im Herbstsemester 2025 sind mehrere Veranstaltungen geplant. Zum Beispiel findet am Freitag, den 19. September, ein Meeting zum Thema \"Merkblatt KI und Recht\" mit Ursula Uttinger, Radwan Eskhita und Christian Rohrdantz statt, moderiert von David Loher. Weitere Meetings sind für den 24. Oktober und den 16. Oktober geplant, mit Themen wie dem Swiss National Supercomputing Centre und einem Experimentiermodul zu SciFi Fiction for Climate Awareness [Vorläufige Agenda Stand-Ups HS 2025].",
+    "response_time": 3.66,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "Welche rechtlichen Fragen bestehen bei KI in der Schweiz laut dem Edu-Lab?",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 1.64,
+    "scores": {
+      "relevance": 1,
+      "clarity": 1,
+      "accuracy": 1,
+      "sources": 1
+    },
+    "response_time_score": 5,
+    "endscore": 1.6,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "wird hier auch auf den Eu Act eingangen?",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 1.46,
+    "scores": {
+      "relevance": 1,
+      "clarity": 1,
+      "accuracy": 1,
+      "sources": 1
+    },
+    "response_time_score": 5,
+    "endscore": 1.6,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "was sind die Schwerpunkte dieses blogs",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 1.77,
+    "scores": {
+      "relevance": 1,
+      "clarity": 1,
+      "accuracy": 1,
+      "sources": 1
+    },
+    "response_time_score": 5,
+    "endscore": 1.6,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "Wann war die letzte US-Wahl",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 1.37,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 5,
+    "endscore": 5.0,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "Um was ging es beim Stand-Up-Meeting vom 2. Mai 2023 FS?",
+    "answer": "Am Stand-Up-Meeting vom 2. Mai 2023 im Frühjahrssemester ging es um \"Flexibilität mit Video-Inputs\" mit Florian Wamser [Programm FS 2023].",
+    "response_time": 2.28,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "Gibt es einen Beitrag zu Plagiatsoftware?",
+    "answer": "Ja, es gibt einen Beitrag zu Plagiatsoftware. Der Artikel \"Plagiatssoftware im Test – Rot heisst nicht immer Plagiat\" behandelt die Nutzung und Herausforderungen von Plagiatserkennungssoftware an der HSLU I [Plagiatssoftware im Test – Rot heisst nicht immer Plagiat].",
+    "response_time": 2.04,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "Was ist ein Plagiat?",
+    "answer": "Ein Plagiat ist die unerlaubte Übernahme von Texten, Ideen oder anderen geistigen Leistungen ohne angemessene Kennzeichnung der Quelle. Es kann sich um kürzere Stellen oder mehrere längere, zusammenhängende Stellen oder ganze Abschnitte handeln [Plagiatssoftware im Test – Rot heisst nicht immer Plagiat].",
+    "response_time": 2.49,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "Gibt es Informationen zu den Modulendprüfungen auf dem Blog?",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 1.44,
+    "scores": {
+      "relevance": 1,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 5,
+    "endscore": 3.8,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "Welche neuen Werte oder Kompetenzen erwartet das Edu-Lab in KI-gestützter Lehre?",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 1.28,
+    "scores": {
+      "relevance": 1,
+      "clarity": 1,
+      "accuracy": 1,
+      "sources": 1
+    },
+    "response_time_score": 5,
+    "endscore": 1.6,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "Are there any survey results on here?",
+    "answer": "Ja, es gibt Umfrageergebnisse zur Nutzung von KI in der Lehre an der HSLU I. Laut der Umfrage setzen viele Dozierende generative KI-Tools täglich und für unterschiedliche Zwecke ein. Die größten Vorteile liegen in der Effizienzsteigerung [HSLU I Dozierende nutzen KI oft - und für ganz unterschiedliche Zwecke].",
+    "response_time": 2.0,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "Um was geht es in den Experimentiermodulen",
+    "answer": "Die Experimentiermodule bieten die Möglichkeit, ein Modul oder ein Element davon zu überarbeiten, um aktuelle Fragen zu bearbeiten und Neues auszuprobieren, wie neue Lehrformate, Inhalte, Technologien oder didaktische Konzepte. Sie sind thematisch offen, und pro Semester werden drei Module von einer Jury ausgewählt und mit Stunden-Vouchers vergütet [Expermentiermodule - wir schaffen Neues].",
+    "response_time": 2.05,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "Wie wird im Edu-I Lab Wissensaustausch zwischen Dozierenden organisiert?",
+    "answer": "Der Wissensaustausch zwischen Dozierenden im Edu-I Lab wird durch verschiedene Peer-Exchange-Formate organisiert. Dazu gehören Peer-Review-Tandems, Stand-Up Reviews, Reflective-Team-Workshops und Fuck-up-Nights. Diese Formate fördern den Austausch über didaktische Methoden und ermöglichen es den Dozierenden, voneinander zu lernen und neue Perspektiven zu gewinnen [Peer-Exchanges].",
+    "response_time": 2.5,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "Welche didaktischen Herausforderungen entstehen durch KI?",
+    "answer": "Die didaktischen Herausforderungen durch KI umfassen unter anderem die Schwierigkeit, alle relevanten Tools zu kennen und ein umfassendes Verständnis der KI-Landschaft zu haben. Dozierende müssen ein klares Verständnis für potenzielle Probleme wie die sogenannte „KI-Halluzination“ entwickeln, bei der KI-Systeme falsche Informationen generieren. Zudem ist es wichtig, eine Kultur des Ausprobierens zu fördern, um den Umgang mit KI-Tools zu erleichtern [Tool Tip Tuesday]. Ein reflektierter Umgang mit KI ist notwendig, um Studierenden zu helfen, die generierten Ergebnisse zu verstehen und methodisches Wissen aufzubauen, wie das Formulieren guter Prompts und das kritische Interpretieren von Antworten [Durch KI wird Programmierung für eine viel grössere Zielgruppe zugänglich].",
+    "response_time": 2.97,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 1
+    },
+    "response_time_score": 4,
+    "endscore": 4.25,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "Welche Blockchain-Projekte hat das Edu-Lab durchgeführt?",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 1.62,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 5,
+    "endscore": 5.0,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "was kannst du mir zum AI Thesis Coach erzählen?",
+    "answer": "Der AI Thesis Coach ist ein Tool, das im Rahmen eines Stand-Up-Meetings am 15. Mai 2024 für Dozierende vorgestellt wurde. Yves Zumbühl präsentierte den AI Thesis Coach, und die Moderation übernahm Andreas Marfurt [Stand-Up-Meetings FS 2024].",
+    "response_time": 2.11,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "Wer ist Bundesrat der Schweiz?",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 1.17,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 5,
+    "endscore": 5.0,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "Are there some discussions about ChatGPT on the blog?",
+    "answer": "Ja, es gibt Diskussionen über ChatGPT auf dem Blog. Zum Beispiel wird die Nutzung von ChatGPT in der Lehre thematisiert, einschließlich der Herausforderungen und Möglichkeiten, die es bietet [ChatGPT: Mit dem eigenen Vokabular und Wissensniveau Fragen stellen].",
+    "response_time": 2.29,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 4,
+    "endscore": 4.85,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "Welche personenbezogenen Daten von Studierenden werden im Edu-Lab gespeichert?",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 1.33,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 5,
+    "endscore": 5.0,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "Wann beginnt das Frühlingssemester 2026?",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 1.43,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 5,
+    "endscore": 5.0,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  },
+  {
+    "session_id": "487eead7-e3f4-4c1e-8840-1549a6a6121a",
+    "question": "dwad hgfdf dsfa",
+    "answer": "Keine Information im vorhandenen Kontext.",
+    "response_time": 1.43,
+    "scores": {
+      "relevance": 5,
+      "clarity": 5,
+      "accuracy": 5,
+      "sources": 5
+    },
+    "response_time_score": 5,
+    "endscore": 5.0,
+    "experiment": "chunks_paragraph_50",
+    "overlap": 50,
+    "prompt_used": "FINAL_PROMPT_2"
+  }
+]

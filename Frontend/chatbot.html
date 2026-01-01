@@ -1,0 +1,326 @@
+<!-- Chatbot-Container -->
+<div id="chatbot">
+    <div id="chat-header">Chatbot</div>
+    <div id="chat-body">
+        <div id="chat-messages"></div>
+        <div id="chat-input-row">
+            <input type="text" id="chat-input" placeholder="Frage eingeben..." />
+        </div>
+        <div id="chat-button-row">
+            <button id="chat-send">Senden</button>
+            <button id="chat-reset">Neuer Chat</button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ===== Container ===== */
+#chatbot {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 360px;
+    height: auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+    font-family: Arial, sans-serif;
+    z-index: 9999;
+}
+
+/* ===== Header ===== */
+#chat-header {
+    background: #d96045;
+    color: #fff;
+    padding: 10px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 12px 12px 0 0;
+}
+
+/* ===== Body ===== */
+#chat-body {
+    display: none;
+    padding: 10px;
+}
+
+/* ===== Messages ===== */
+#chat-messages {
+    height: 260px;
+    overflow-y: auto;
+    font-size: 13px;
+    line-height: 1.4;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 12px;
+}
+
+/* ===== Chat Bubbles ===== */
+.chat-message {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    word-wrap: break-word;
+    line-height: 1.5;
+    font-size: 13px;
+    display: inline-block;
+    clear: both;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* User Bubble */
+.chat-message.user {
+    background: #e0e0e0;
+    color: #000;
+    float: right;
+    text-align: right;
+    margin-left: 20%;
+}
+
+/* Bot Bubble */
+.chat-message.bot {
+    background: #ffdede;
+    color: #000;
+    float: left;
+    text-align: left;
+    margin-right: 20%;
+    border-left: 4px solid #d96045;
+}
+
+/* Labels */
+.chat-message b {
+    display: block;
+    font-size: 11px;
+    opacity: 0.7;
+    margin-bottom: 4px;
+}
+
+/* Input */
+#chat-input-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+#chat-input {
+    flex: 1;
+    padding: 6px;
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+/* Buttons */
+#chat-button-row {
+    display: flex;
+    gap: 6px;
+}
+
+#chat-send,
+#chat-reset {
+    flex: 1;
+    padding: 6px 12px;
+    font-size: 13px;
+    border: none;
+    background: #d96045;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#chat-send:hover,
+#chat-reset:hover {
+    background: #b34a36;
+}
+
+/* Links */
+#chat-messages a {
+    color: #d96045;
+    text-decoration: underline;
+    font-size: 12px;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    #chatbot {
+        width: 95vw;
+        right: 2.5vw;
+        bottom: 10px;
+    }
+}
+</style>
+
+<script>
+const LOCAL_BASE_URL = "http://edu-lab-test.local";
+let sessionId = localStorage.getItem("chatSessionId") || null;
+
+const header = document.getElementById("chat-header");
+const body = document.getElementById("chat-body");
+const messages = document.getElementById("chat-messages");
+const input = document.getElementById("chat-input");
+const sendBtn = document.getElementById("chat-send");
+
+// ===================
+// Scroll Handling
+// ===================
+function saveScrollPosition() {
+    localStorage.setItem("chatScroll", messages.scrollTop);
+}
+
+function restoreScrollPosition() {
+    const pos = localStorage.getItem("chatScroll");
+    if (pos !== null) {
+        messages.scrollTop = parseInt(pos, 10);
+    }
+}
+
+// ===================
+// Restore chat
+// ===================
+const savedChat = localStorage.getItem("chatHistory");
+if (savedChat) {
+    messages.innerHTML = savedChat;
+    messages.scrollTop = messages.scrollHeight;
+} else {
+    messages.innerHTML = `
+        <div class="chat-message bot">
+            <b>Bot</b>
+            👋 Hallo! Ich bin der Chatbot des Edu-I Lab der Hochschule Luzern.<br><br>
+            Ich beantworte Fragen zu Blogbeiträgen, Projekten und Experimentiermodulen.
+            Stell mir einfach deine Frage 🙂
+        </div>
+    `;
+    saveChat();
+}
+
+const wasOpen = localStorage.getItem("chatOpen");
+if (wasOpen === "true") body.style.display = "block";
+
+header.onclick = () => {
+    const isOpen = body.style.display === "block";
+    body.style.display = isOpen ? "none" : "block";
+    localStorage.setItem("chatOpen", !isOpen);
+};
+
+// ===================
+// Helpers
+// ===================
+function escapeRegex(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function mapToLocalUrl(originalUrl) {
+    try {
+        const url = new URL(originalUrl);
+        const parts = url.pathname.split("/").filter(Boolean);
+        const slug = parts[parts.length - 1];
+        return `${LOCAL_BASE_URL}/${slug}/`;
+    } catch {
+        return originalUrl;
+    }
+}
+
+// ===================
+// Save chat
+// ===================
+function saveChat() {
+    localStorage.setItem("chatHistory", messages.innerHTML);
+}
+
+// ===================
+// Reset
+// ===================
+document.getElementById("chat-reset").onclick = () => {
+    messages.innerHTML = `
+        <div class="chat-message bot">
+            <b>Bot</b>
+            👋 Der Chat wurde zurückgesetzt.<br>
+            Wie kann ich dir helfen?
+        </div>
+    `;
+    localStorage.removeItem("chatHistory");
+    localStorage.removeItem("chatSessionId");
+    sessionId = null;
+    saveChat();
+};
+
+// ===================
+// Send message
+// ===================
+sendBtn.onclick = async () => {
+    const question = input.value.trim();
+    if (!question) return;
+
+    messages.innerHTML += `
+        <div class="chat-message user">
+            <b>Du</b>
+            ${question}
+        </div>
+    `;
+    input.value = "";
+    messages.scrollTop = messages.scrollHeight;
+    saveChat();
+
+    try {
+        const res = await fetch("http://127.0.0.1:5000/ask", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ question, session_id: sessionId })
+        });
+
+        const data = await res.json();
+
+        if (data.session_id) {
+            sessionId = data.session_id;
+            localStorage.setItem("chatSessionId", sessionId);
+        }
+
+        let answerHtml = data.answer;
+
+        if (data.inline_sources?.length) {
+            data.inline_sources.forEach(src => {
+                if (src.url && src.title) {
+                    const localUrl = mapToLocalUrl(src.url);
+                    const regex = new RegExp(`\\[${escapeRegex(src.title)}\\]`, "g");
+
+                    answerHtml = answerHtml.replace(
+                        regex,
+                        `<a href="${localUrl}" target="_self" onclick="saveScrollPosition()">[${src.title}]</a>`
+                    );
+                }
+            });
+        }
+
+        messages.innerHTML += `
+            <div class="chat-message bot">
+                <b>Bot</b>
+                ${answerHtml}
+            </div>`
+        ;
+
+        messages.scrollTop = messages.scrollHeight;
+        saveChat();
+
+    } catch (err) {
+        messages.innerHTML += `
+            <div class="chat-message bot" style="color:red;">
+                <b>Bot</b>
+                Fehler beim Verbinden
+            </div>
+        `;
+        saveChat();
+    }
+};
+
+// Enter key
+input.addEventListener("keydown", e => {
+    if (e.key === "Enter") sendBtn.click();
+});
+
+// Restore scroll after reload
+window.addEventListener("load", () => {
+    restoreScrollPosition();
+});
+</script>

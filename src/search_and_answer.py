@@ -20,7 +20,7 @@ load_dotenv()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Experiment auswählen
-EXPERIMENT = "chunks_recursive_overl_50"  # <- hier das gewünschte Experiment ändern
+EXPERIMENT = "chunks_paragraph_no_overlap"  # <- hier das gewünschte Experiment ändern
 
 # Pfade zu Index und Metadaten
 INDEX_DIR = os.path.join(BASE_DIR, "data", "indices", EXPERIMENT)

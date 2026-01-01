@@ -2,16 +2,17 @@ import os
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
-# ===============================
-# Pfade
-# ===============================
+# -----------------------------
+# Basisverzeichnis und Results-Ordner
+# -----------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 RESULTS_DIR = os.path.join(BASE_DIR, "results")
 
-# ===============================
-# Alle Result-Dateien laden
-# ===============================
+# -----------------------------
+# Alle JSON-Dateien im Ordner laden
+# -----------------------------
 all_results = []
 
 for file in os.listdir(RESULTS_DIR):
@@ -20,68 +21,58 @@ for file in os.listdir(RESULTS_DIR):
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
             for row in data:
-                row["_file"] = file
+                # Dateiname als Experimentname abspeichern
+                row["_experiment_file"] = file
                 all_results.append(row)
+
+if not all_results:
+    print("Keine Ergebnisse gefunden.")
+    exit()
 
 df = pd.DataFrame(all_results)
 
-print(f"\n📊 {len(df)} Einträge aus {len(df['_file'].unique())} Experimenten geladen.\n")
-
-# ===============================
-# Metriken extrahieren
-# ===============================
-df["relevance"] = df["bewertung"].apply(lambda x: x["relevance"])
-df["clarity"] = df["bewertung"].apply(lambda x: x["clarity"])
-df["accuracy"] = df["bewertung"].apply(lambda x: x["accuracy"])
-df["sources"] = df["bewertung"].apply(lambda x: x["sources"])
-
-# ===============================
-# Aggregation pro Experiment
-# ===============================
-group_cols = ["experiment", "overlap", "prompt"]
-
-summary = (
-    df.groupby(group_cols)
-    .agg(
-        avg_endscore=("endscore", "mean"),
-        avg_relevance=("relevance", "mean"),
-        avg_accuracy=("accuracy", "mean"),
-        avg_clarity=("clarity", "mean"),
-        avg_sources=("sources", "mean"),
-        avg_response_time=("dauer_s", "mean"),
-        n_questions=("ID", "count")
-    )
-    .reset_index()
-    .sort_values(by="avg_endscore", ascending=False)
+# -----------------------------
+# Prozent der Fragen mit Endscore ≥ 4 berechnen
+# -----------------------------
+percent_passed = (
+    df.groupby("_experiment_file")
+    .apply(lambda x: (x["endscore"] >= 4.5).sum() / len(x) * 100)
+    .reset_index(name="percent_above_4")
+    .sort_values(by="percent_above_4", ascending=True)
 )
 
-print("\n🏆 BESTE KONFIGURATIONEN:")
-print(summary)
+print("\nProzent der Fragen mit Endscore ≥ 4 pro Experiment:")
+print(percent_passed)
 
-# ===============================
-# Beste Konfiguration ausgeben
-# ===============================
-best = summary.iloc[0]
-print("\n✅ BESTES SETUP:")
-print(best)
+# -----------------------------
+# Balkendiagramm erstellen
+# -----------------------------
+sns.set(style="whitegrid")
+plt.figure(figsize=(12, 7))
 
-# ===============================
-# Visualisierung
-# ===============================
-plt.figure(figsize=(10, 5))
-plt.barh(
-    summary["experiment"] + " | " + summary["prompt"],
-    summary["avg_endscore"]
+bars = plt.barh(
+    percent_passed["_experiment_file"],      # hier werden die Dateinamen als Achsenbeschriftung verwendet
+    percent_passed["percent_above_4"],
+    color=sns.color_palette("Blues_d", len(percent_passed))
 )
-plt.xlabel("Durchschnittlicher Endscore")
-plt.ylabel("Experiment")
-plt.title("Vergleich der Experimente")
-plt.gca().invert_yaxis()
+
+# Prozentwerte direkt auf den Balken anzeigen
+for bar in bars:
+    width = bar.get_width()
+    plt.text(width + 1, bar.get_y() + bar.get_height() / 2,
+             f"{width:.1f}%", va="center", fontsize=10)
+
+plt.xlabel("Prozent der Fragen mit Endscore ≥ 4.5")
+plt.ylabel("Experiment (JSON-Datei)")
+plt.title("Qualität der Experimente nach Endscore", fontsize=14, fontweight="bold")
+plt.xlim(0, 100)
 plt.tight_layout()
 
-# Plot speichern
-plot_path = os.path.join(RESULTS_DIR, "experiment_comparison.png")
-plt.savefig(plot_path)
+# -----------------------------
+# Plot speichern und anzeigen
+# -----------------------------
+plot_path = os.path.join(RESULTS_DIR, "percent_above_4_by_file.png")
+plt.savefig(plot_path, dpi=300)
 plt.show()
 
-print(f"\n📈 Plot gespeichert unter: {plot_path}")
+print(f"\nPlot gespeichert unter: {plot_path}")
