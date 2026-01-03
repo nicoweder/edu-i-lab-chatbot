@@ -6,7 +6,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Pfade zum XML-Export und Ausgabeordner (relativ zum Projektverzeichnis)
-XML_FILE = os.path.join(BASE_DIR, "data", "edu-ilab.WordPress.2025-10-07.xml")
+XML_FILE = os.path.join(BASE_DIR, "data", "edu-ilab.WordPress.2025-10-07.xml")# Name hier anpassen falls neue .xml Datei
 OUTPUT_DIR = os.path.join(BASE_DIR, "data", "articles_json")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 

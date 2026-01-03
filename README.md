@@ -1,22 +1,39 @@
 # Edu-I Lab Chatbot – Hochschule Luzern
 
-Dieses Projekt implementiert einen Chatbot für den Edu-I Lab Blog der Hochschule Luzern, der Fragen zu Blogartikeln beantwortet, dabei Quellen angibt und kontextbasiert arbeitet. Der Chatbot nutzt eine Vektordatenbank (FAISS) für semantische Suche und OpenAI GPT-4o für die Antwortgenerierung.
+Dieses Projekt implementiert einen Chatbot für den Edu-I Lab Blog der Hochschule Luzern, der Fragen zu Blogartikeln beantwortet, dabei Quellen angibt und kontextbasiert arbeitet. Der Chatbot nutzt eine Vektordatenbank (FAISS) für semantische Suche und OpenAI GPT-4o für die Antwortgenerierung. Die vollständigen Artikel-Chunks und FAISS-Indizes sind aufgrund der Größe nicht im Repository enthalten. Sie müssen durch Ausführen mehrerer Schritte selber erstellt werden.
+
+
 
 ## Projektstruktur
 
-| Datei / Ordner                   | Beschreibung                                                                      |
-| -------------------------------- | --------------------------------------------------------------------------------- |
-| `preprocessing1.py`              | Liest XML-Export von WordPress ein und speichert Artikel als JSON.                |
-| `preprocessing2.py`              | Bereinigt HTML-Inhalte, entfernt Bilder und Tracking-Parameter, extrahiert Links. |
-| `chunk_articles_by_paragraph.py` | Chunkt Artikel nach Absätzen für Retrieval.                                       |
-| `chunk_articles_by_words.py`     | Chunkt Artikel nach Wortanzahl (fixed size).                                      |
-| `chunk_articles_recursive.py`    | Rekursives Chunking mit Überschneidungen zur besseren Kontextabdeckung.           |
-| `create_vector_db.py`            | Erstellt FAISS-Vektorindex mit ausgewählten Chunks und Metadaten.                 |
-| `search_and_answer.py`           | Kernlogik des Chatbots: RAG-Session, FAISS-Suche, OpenAI-Integration.             |
-| `prompts.py`                     | Enthält die finalen Prompt-Varianten für den Chatbot.                             |
-| `api.py`                         | Flask-Testumgebung zur Integration als Web-Chatbot.                               |
-| `tests/`                         | Testfälle für Evaluation (Fragen, Bewertung).                                     |
-| `tests/results/`                 | Ergebnisse von Tests und Evaluationen (JSON, CSV, Plots).                         |
+| Datei / Ordner                     | Beschreibung                                                                                  |
+| --------------------------------- | --------------------------------------------------------------------------------------------- |
+| `src/`                             | Enthält alle aktuellen Skripte für Datenaufbereitung, Chunking, Vektorindex und Chatbot-Logik |
+| `src/export_to_json.py`            | Liest XML-Export von WordPress ein und speichert Artikel als JSON                              |
+| `src/clean_articles.py`            | Bereinigt HTML-Inhalte, entfernt Bilder/Tracking-Parameter und extrahiert Links               |
+| `src/chunk_articles_by_paragraph.py` | Chunkt Artikel nach Absätzen für Retrieval                                                    |
+| `src/chunk_articles_recursive.py`  | Rekursives Chunking mit Überschneidungen zur besseren Kontextabdeckung                        |
+| `src/create_vector_db.py`          | Erstellt FAISS-Vektorindex mit ausgewählten Chunks und Metadaten                               |
+| `src/search_and_answer.py`         | Kernlogik des Chatbots: RAG-Session, FAISS-Suche, OpenAI-Integration                          |
+| `src/prompts.py`                   | Enthält die finalen Prompt-Varianten für den Chatbot                                          |
+| `src/api.py`                       | Flask-Testumgebung für den Web-Chatbot                                                       |
+| `tests/`                           | Testfälle und Analyse-Skripte für Evaluation                                                  |
+| `tests/test_cases/`                | 21 Fragen für Evaluation                                                |
+| `tests/results/`                   | Beispieloutputs, Plots und Ergebnisse der Tests                                               |
+| `tests/analyse_best_config.py`     | Analysiert die besten Parameterkonfigurationen der Experimente                                |
+| `tests/analyse_results.py`         | Visualisiert Test- bzw. Experimentergebnisse                                    |
+| `tests/evaluation_manually.py`     | Skript für manuelle Bewertung von Antworten                                                  |
+| `tests/testfälle.py`               | Beispiel-Testfragen für automatische Evaluation                                               |
+| `OLD/`                             | Enthält ältere Versionen von Skripten und Experimenten                                        |
+| `OLD/api_old.py`                   | Alte Version der Flask-Testumgebung                                                         |
+| `OLD/chunk_articles_by_words.py`   | Alte Chunking-Variante nach Wortanzahl                                                       |
+| `OLD/run_tests_with_eval.py`       | Alte Testskripte für Evaluation                                                              |
+| `Frontend/`                         | Enthält die HTML-Datei für den Web-Chatbot                                                  |
+| `Frontend/chatbot.html`            | Frontend des Chatbots                                                                        |
+| `requirements.txt`                 | Listet alle Python-Abhängigkeiten für das Projekt                                             |
+| `README.md`                        | Projektbeschreibung, Setup-Anleitung und Nutzungshinweise                                    |
+| `.gitignore`                        | Enthält Regeln, welche Dateien/Ordner nicht ins Repository aufgenommen werden sollen         |
+
 
 
 ## Installation
@@ -50,17 +67,17 @@ OPENAI_API_KEY=sk-...
 
 ## Datenvorbereitung
 
-1. WordPress XML-Export vom live Blog besorgen und  in data/ ablegen. Die Datei hat folgendes Format: (edu-ilab.WordPress.2025-10-07.xml)
+1. WordPress XML-Export die auch abgegeben wurde oder vom live Blog besorgen und  in data/ ablegen. Die Datei hat folgendes Format: (edu-ilab.WordPress.2025-10-07.xml)
 
-2. Preprocessing 1 ausführen – XML zu JSON:
+2. export_to_json ausführen – XML zu JSON:
 ```bash
-python preprocessing1.py
+python export_to_json.py
 ```
 - Ausgabe: data/articles_json/
 
 3. Preprocessing 2 ausführen – Bereinigung & Link-Extraktion:
 ```bash
-python preprocessing2.py
+python clean_articles.py
 ```
 -Ausgabe: data/clean_articles/
 
@@ -74,7 +91,7 @@ Für Retrieval-augmented Generation (RAG) müssen Artikel in Chunks aufgeteilt w
 
 - Rekursiv mit Überschneidungen: chunk_articles_recursive.py
 
-Vektor-Datenbank erstellen(es muss darauf geachtet werden, dass die zuvor erstellten Chunks als Grundlage gewählt werden):
+Vektor-Datenbank erstellen, es muss darauf geachtet werden, dass die zuvor erstellten Chunks als Grundlage gewählt werden. Dies geschiet indem man den Namen des erstellten Chunkordners innerhalb von create_vector_db.py angibt (z.B. EXPERIMENT=):
 ```bash
 python create_vector_db.py
 ```

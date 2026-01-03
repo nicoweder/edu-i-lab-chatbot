@@ -7,7 +7,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Eingabe- und Ausgabeordner relativ zum Projektverzeichnis
 INPUT_DIR = os.path.join(BASE_DIR, "data", "clean_articles")
-OUTPUT_DIR = os.path.join(BASE_DIR, "data", "chunks", "chunks_paragraph_120")
+OUTPUT_DIR = os.path.join(BASE_DIR, "data", "chunks", "chunks_paragraph_120")#Name hier angeben
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 MIN_WORDS = 50
