@@ -1,6 +1,6 @@
 # Edu-I Lab Chatbot – Hochschule Luzern
 
-Dieses Projekt implementiert einen Chatbot für den Edu-I Lab Blog der Hochschule Luzern, der Fragen zu Blogartikeln beantwortet, dabei Quellen angibt und kontextbasiert arbeitet. Der Chatbot nutzt eine Vektordatenbank (FAISS) für semantische Suche und OpenAI GPT-4o für die Antwortgenerierung. Die vollständigen Artikel-Chunks und FAISS-Indizes sind aufgrund der Größe nicht im Repository enthalten. Sie müssen durch Ausführen mehrerer Schritte selber erstellt werden.
+Dieses Projekt implementiert einen Chatbot für den Edu-I Lab Blog der Hochschule Luzern, der Fragen zu Blogartikeln beantwortet, dabei Quellen angibt und kontextbasiert arbeitet. Der Chatbot nutzt eine Vektordatenbank (FAISS) für semantische Suche und OpenAI GPT-4o für die Antwortgenerierung. Die vollständigen Artikel-Chunks und FAISS-Indizes sind aufgrund der Größe nicht im Repository enthalten. Sie müssen durch Ausführen mehrerer Schritte (mithilfe der vom Blog stammenden XML-Datei) selber erstellt werden.
 
 
 
