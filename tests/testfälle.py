@@ -2,7 +2,7 @@ import json
 import os
 
 # Verzeichnis, in dem die Testfälle gespeichert werden
-OUTPUT_FILE = os.path.join(os.path.dirname(__file__), "testcases2.json")
+OUTPUT_FILE = os.path.join(os.path.dirname(__file__), "testcases.json")
 
 # Testfälle für den Chatbot
 

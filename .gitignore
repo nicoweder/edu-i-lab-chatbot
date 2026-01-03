@@ -5,5 +5,5 @@ __pycache__/
 *.pyc
 *.log
 .DS_Store
-
-data/
+data/*
+!data/edu-ilab.WordPress.2025-10-07.xml

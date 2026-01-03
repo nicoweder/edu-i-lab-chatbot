@@ -41,7 +41,7 @@ Dieses Projekt implementiert einen Chatbot für den Edu-I Lab Blog der Hochschul
 
 2. Projekt klonen:
 ```bash
-git clone <repository_url>
+git clone <https://github.com/nicoweder/edu-i-lab-chatbot>
 cd edu-i-lab-chatbot
 ```
 3. Virtuelle Umgebung erstellen und aktivieren:
@@ -60,7 +60,7 @@ venv\Scripts\activate
 ```bash
 pip install -r requirements.txt
 ```
-5. OpenAI API-Key setzen (in edu-i-chatbot/.env):
+5. OpenAI API-Key setzen (edu-i-chatbot/.env Datei erstellen und Key angeben):
 
 OPENAI_API_KEY=sk-...
 
