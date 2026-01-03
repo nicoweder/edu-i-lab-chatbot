@@ -1,4 +1,4 @@
-<!-- Chatbot-Container -->
+<!-- Container für den Chatbot -->
 <div id="chatbot">
     <div id="chat-header">Chatbot</div>
     <div id="chat-body">
@@ -14,7 +14,7 @@
 </div>
 
 <style>
-/* ===== Container ===== */
+/* Container für das Chatbot-Widget */
 #chatbot {
     position: fixed;
     bottom: 20px;
@@ -28,7 +28,7 @@
     z-index: 9999;
 }
 
-/* ===== Header ===== */
+/* Kopfbereich des Chatbots mit Titel und Toggle-Funktion */
 #chat-header {
     background: #d96045;
     color: #fff;
@@ -39,13 +39,13 @@
     border-radius: 12px 12px 0 0;
 }
 
-/* ===== Body ===== */
+/* Hauptbereich des Chatbots, der Nachrichten und Eingabeelemente enthält */
 #chat-body {
     display: none;
     padding: 10px;
 }
 
-/* ===== Messages ===== */
+/* Container für die Anzeige der Chatnachrichten */
 #chat-messages {
     height: 260px;
     overflow-y: auto;
@@ -56,7 +56,7 @@
     margin-bottom: 12px;
 }
 
-/* ===== Chat Bubbles ===== */
+/* Allgemeines Styling für Nachrichtenblasen */
 .chat-message {
     max-width: 80%;
     padding: 10px 14px;
@@ -70,7 +70,7 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* User Bubble */
+/* Darstellung von Nutzernachrichten */
 .chat-message.user {
     background: #e0e0e0;
     color: #000;
@@ -79,7 +79,7 @@
     margin-left: 20%;
 }
 
-/* Bot Bubble */
+/* Darstellung von Bot-Antworten */
 .chat-message.bot {
     background: #ffdede;
     color: #000;
@@ -89,7 +89,7 @@
     border-left: 4px solid #d96045;
 }
 
-/* Labels */
+/* Formatierung der Rollenkennzeichnung innerhalb der Nachrichten */
 .chat-message b {
     display: block;
     font-size: 11px;
@@ -97,7 +97,7 @@
     margin-bottom: 4px;
 }
 
-/* Input */
+/* Layout des Eingabebereichs für Nutzerfragen */
 #chat-input-row {
     display: flex;
     gap: 6px;
@@ -112,7 +112,7 @@
     border-radius: 6px;
 }
 
-/* Buttons */
+/* Layout und Gestaltung der Aktionsbuttons */
 #chat-button-row {
     display: flex;
     gap: 6px;
@@ -135,14 +135,14 @@
     background: #b34a36;
 }
 
-/* Links */
+/* Darstellung von Links innerhalb der Chatnachrichten */
 #chat-messages a {
     color: #d96045;
     text-decoration: underline;
     font-size: 12px;
 }
 
-/* Mobile */
+/* Anpassungen für mobile Endgeräte */
 @media (max-width: 480px) {
     #chatbot {
         width: 95vw;
@@ -162,13 +162,12 @@ const messages = document.getElementById("chat-messages");
 const input = document.getElementById("chat-input");
 const sendBtn = document.getElementById("chat-send");
 
-// ===================
-// Scroll Handling
-// ===================
+/* Speicherung der aktuellen Scrollposition im Local Storage */
 function saveScrollPosition() {
     localStorage.setItem("chatScroll", messages.scrollTop);
 }
 
+/* Wiederherstellung der Scrollposition nach einem Reload */
 function restoreScrollPosition() {
     const pos = localStorage.getItem("chatScroll");
     if (pos !== null) {
@@ -176,9 +175,7 @@ function restoreScrollPosition() {
     }
 }
 
-// ===================
-// Restore chat
-// ===================
+/* Wiederherstellung des Chatverlaufs aus dem Local Storage */
 const savedChat = localStorage.getItem("chatHistory");
 if (savedChat) {
     messages.innerHTML = savedChat;
@@ -195,6 +192,7 @@ if (savedChat) {
     saveChat();
 }
 
+/* Wiederherstellung des Öffnungszustands des Chatfensters */
 const wasOpen = localStorage.getItem("chatOpen");
 if (wasOpen === "true") body.style.display = "block";
 
@@ -204,13 +202,12 @@ header.onclick = () => {
     localStorage.setItem("chatOpen", !isOpen);
 };
 
-// ===================
-// Helpers
-// ===================
+/* Maskiert Sonderzeichen zur sicheren Verwendung in regulären Ausdrücken */
 function escapeRegex(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+/* Wandelt externe URLs in lokale Pfade um */
 function mapToLocalUrl(originalUrl) {
     try {
         const url = new URL(originalUrl);
@@ -222,16 +219,12 @@ function mapToLocalUrl(originalUrl) {
     }
 }
 
-// ===================
-// Save chat
-// ===================
+/* Persistente Speicherung des aktuellen Chatverlaufs */
 function saveChat() {
     localStorage.setItem("chatHistory", messages.innerHTML);
 }
 
-// ===================
-// Reset
-// ===================
+/* Zurücksetzen des Chats und Entfernen aller gespeicherten Zustände */
 document.getElementById("chat-reset").onclick = () => {
     messages.innerHTML = `
         <div class="chat-message bot">
@@ -246,9 +239,7 @@ document.getElementById("chat-reset").onclick = () => {
     saveChat();
 };
 
-// ===================
-// Send message
-// ===================
+/* Verarbeitung und Versand einer Nutzereingabe an das Backend */
 sendBtn.onclick = async () => {
     const question = input.value.trim();
     if (!question) return;
@@ -297,8 +288,8 @@ sendBtn.onclick = async () => {
             <div class="chat-message bot">
                 <b>Bot</b>
                 ${answerHtml}
-            </div>`
-        ;
+            </div>
+        `;
 
         messages.scrollTop = messages.scrollHeight;
         saveChat();
@@ -314,12 +305,12 @@ sendBtn.onclick = async () => {
     }
 };
 
-// Enter key
+/* Absenden der Nachricht durch Betätigen der Enter-Taste */
 input.addEventListener("keydown", e => {
     if (e.key === "Enter") sendBtn.click();
 });
 
-// Restore scroll after reload
+/* Wiederherstellung der Scrollposition nach dem Laden der Seite */
 window.addEventListener("load", () => {
     restoreScrollPosition();
 });

@@ -4,27 +4,27 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Basisverzeichnis bestimmen
+# Ermittlung des Basisverzeichnisses des aktuellen Skripts
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Pfad zur Ergebnisdatei
+# Definition des Pfades zur auszuwertenden JSON-Ergebnisdatei
 JSON_PATH = os.path.join(BASE_DIR, "results", "paragraph_over0_FINAL_PROMPT_2.json")
 
-# JSON-Datei laden
+# Laden der JSON-Datei in den Arbeitsspeicher
 with open(JSON_PATH, "r", encoding="utf-8") as f:
     data = json.load(f)
 
-# Daten in DataFrame überführen
+# Überführung der geladenen Daten in ein Pandas DataFrame
 df = pd.DataFrame(data)
 
-# Bewertungsdimensionen extrahieren
+# Extraktion der einzelnen Bewertungsdimensionen aus der Score-Struktur
 df["relevance"] = df["scores"].apply(lambda x: x["relevance"])
 df["clarity"] = df["scores"].apply(lambda x: x["clarity"])
 df["accuracy"] = df["scores"].apply(lambda x: x["accuracy"])
 df["sources"] = df["scores"].apply(lambda x: x["sources"])
 df["response_time_score"] = df["response_time_score"]
 
-# Durchschnittswerte berechnen
+# Berechnung der Durchschnittswerte aller Bewertungsdimensionen
 avg_scores = df[
     ["relevance", "clarity", "accuracy", "sources", "response_time_score", "endscore"]
 ].mean()
@@ -32,9 +32,7 @@ avg_scores = df[
 print("\nDurchschnittswerte:")
 print(avg_scores)
 
-# -----------------------------
-# Visualisierung
-# -----------------------------
+# Erstellung einer Balkengrafik zur Darstellung der durchschnittlichen Bewertungen
 sns.set(style="whitegrid")
 plt.figure(figsize=(9, 5))
 
@@ -44,10 +42,10 @@ bars = plt.bar(
     color=sns.color_palette("Blues", len(avg_scores))
 )
 
-# Y-Achse sinnvoll begrenzen
+# Festlegung sinnvoller Grenzen für die y-Achse entsprechend der Skala
 plt.ylim(0, 5.2)
 
-# Werte oberhalb der Balken anzeigen
+# Anzeige der exakten Durchschnittswerte oberhalb der Balken
 for bar in bars:
     height = bar.get_height()
     plt.text(
@@ -59,13 +57,13 @@ for bar in bars:
         fontsize=10
     )
 
-# Achsen & Titel
+# Beschriftung der Achsen sowie Festlegung des Diagrammtitels
 plt.ylabel("Durchschnittlicher Score (1–5)")
 plt.title("Durchschnittliche Bewertung – paragraph_over0_FINAL_PROMPT_2")
 
 plt.tight_layout()
 
-# Plot speichern
+# Speicherung der Visualisierung als hochauflösende Bilddatei
 output_path = os.path.join(
     BASE_DIR,
     "results",

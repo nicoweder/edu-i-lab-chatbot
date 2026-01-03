@@ -35,7 +35,7 @@ def get_session(session_id=None):
         metadata=metadata
     )
 
-    # 🔹 Debug-Ausgabe
+    #  Debug-Ausgabe
     logging.info(f"Neue Chat-Session erstellt: {new_id}")
 
     return sessions[new_id], new_id

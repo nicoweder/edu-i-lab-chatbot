@@ -3,31 +3,29 @@ import time
 import json
 import os
 
-# -----------------------
-# Experiment-Metadaten
-# -----------------------
+# Definition zentraler Metadaten zur Beschreibung des Experiments
 EXPERIMENT = "chunks_recursive_no_over"
 OVERLAP = 0
 PROMPT_USED = "FINAL_PROMPT_2"
 
-# Session-ID der laufenden Chat-Session abfragen
+# Abfrage der Session-ID zur eindeutigen Zuordnung der Chat-Session
 SESSION_ID = input("Session-ID eingeben: ")
 
 BASE_URL = "http://127.0.0.1:5000"
 print("Warte auf Antworten aus dem Frontend...")
 print("Beende das Skript manuell mit STRG+C, wenn alle Tests abgeschlossen sind.\n")
 
-# Ergebnisliste initialisieren
+# Initialisierung der Ergebnisliste zur Speicherung aller Bewertungen
 results = []
 
-# JSON-Datei mit Experiment-Metadaten im Namen
+# Festlegung des Dateinamens zur persistenten Speicherung der Evaluationsergebnisse
 json_filename = f"evaluation_results_{EXPERIMENT}_over{OVERLAP}_{PROMPT_USED}.json"
 if os.path.exists(json_filename):
     with open(json_filename, "r", encoding="utf-8") as f:
         results = json.load(f)
 
 def rate(name):
-    """Fragt den Benutzer nach einer Bewertung zwischen 1 und 5."""
+    """Fordert eine manuelle Bewertung für die angegebene Kategorie im Bereich von 1 bis 5 an."""
     while True:
         try:
             v = int(input(f"{name} (1–5): "))
@@ -37,27 +35,26 @@ def rate(name):
             pass
 
 def is_already_evaluated(question_text):
-    """Prüft, ob diese Frage bereits bewertet wurde."""
+    """Überprüft, ob die angegebene Frage bereits bewertet und gespeichert wurde."""
     return any(r["question"] == question_text for r in results)
 
 try:
     while True:
-        # Warten, bis eine neue Antwort verfügbar ist
+        # Polling-Schleife zum Warten auf neue Antworten aus dem Frontend
         while True:
             r = requests.get(f"{BASE_URL}/last_result/{SESSION_ID}")
             if r.status_code == 200:
                 data = r.json()
-                # Prüfen, ob diese Frage schon bewertet wurde
                 if not is_already_evaluated(data["question"]):
                     break
             time.sleep(1)
 
-        print("\n--- Neue Antwort erhalten ---")
+        print("\nNeue Antwort erhalten")
         print("Frage:", data["question"])
         print("Antwort:", data["answer"])
         print("Antwortzeit:", data["response_time"], "s")
 
-        # Bewertung
+        # Manuelle Bewertung der Antwort anhand definierter Qualitätskriterien
         scores = {
             "relevance": rate("Relevanz"),
             "clarity": rate("Verständlichkeit"),
@@ -65,7 +62,7 @@ try:
             "sources": rate("Quellenqualität")
         }
 
-        # Antwortzeit bewerten
+        # Ableitung eines diskreten Scores aus der gemessenen Antwortzeit
         rt = data["response_time"]
         if rt < 2:
             rt_score = 5
@@ -76,7 +73,7 @@ try:
         else:
             rt_score = 1
 
-        # Gesamtscore berechnen
+        # Berechnung des gewichteten Gesamtscores der Antwort
         endscore = round(
             scores["relevance"] * 0.3 +
             scores["clarity"] * 0.15 +
@@ -88,7 +85,7 @@ try:
 
         print("Endscore:", endscore)
 
-        # Ergebnis speichern
+        # Speicherung aller relevanten Bewertungs- und Metadaten
         results.append({
             "session_id": SESSION_ID,
             "question": data["question"],
@@ -102,7 +99,7 @@ try:
             "prompt_used": PROMPT_USED
         })
 
-        # JSON-Datei aktualisieren
+        # Aktualisierung der JSON-Datei zur Sicherung des aktuellen Evaluationsstands
         with open(json_filename, "w", encoding="utf-8") as f:
             json.dump(results, f, ensure_ascii=False, indent=2)
 
