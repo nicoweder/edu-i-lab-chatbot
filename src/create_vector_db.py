@@ -13,7 +13,7 @@ load_dotenv()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Auswahl der verwendeten Chunking-Strategie
-EXPERIMENT = "chunks_paragraph_100"
+EXPERIMENT = "chunks_paragraph_no_overlap"
 
 # Definition der Verzeichnisse für Text-Chunks und den zugehörigen FAISS-Index
 CHUNKS_DIR = os.path.join(BASE_DIR, "data", "chunks", EXPERIMENT)

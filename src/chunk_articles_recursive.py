@@ -8,12 +8,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Eingabe- und Ausgabeordner relativ zum Projektverzeichnis
 INPUT_DIR = os.path.join(BASE_DIR, "data", "clean_articles")
-OUTPUT_DIR = os.path.join(BASE_DIR, "data", "chunks", "chunks_recursive_overl_30")#Name hier angeben
+OUTPUT_DIR = os.path.join(BASE_DIR, "data", "chunks", "chunks_recursive_no_overlap")#Name hier angeben
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 MIN_WORDS = 50
 MAX_WORDS = 400
-OVERLAP_WORDS = 30  
+OVERLAP_WORDS = 0   #Gegebenenfalls anpassen falls mit Overlap gewüscht
 
 def count_words(text):
     """

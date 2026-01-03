@@ -11,25 +11,24 @@ Dieses Projekt implementiert einen Chatbot für den Edu-I Lab Blog der Hochschul
 | `src/`                             | Enthält alle aktuellen Skripte für Datenaufbereitung, Chunking, Vektorindex und Chatbot-Logik |
 | `src/export_to_json.py`            | Liest XML-Export von WordPress ein und speichert Artikel als JSON                              |
 | `src/clean_articles.py`            | Bereinigt HTML-Inhalte, entfernt Bilder/Tracking-Parameter und extrahiert Links               |
-| `src/chunk_articles_by_paragraph.py` | Chunkt Artikel nach Absätzen für Retrieval                                                    |
+| `src/chunk_articles_by_paragraph.py` | Chunkt Artikel nach Absätzen für Retrieval auch mit Überschneidungen falls definiert         |
 | `src/chunk_articles_recursive.py`  | Rekursives Chunking mit Überschneidungen zur besseren Kontextabdeckung                        |
 | `src/create_vector_db.py`          | Erstellt FAISS-Vektorindex mit ausgewählten Chunks und Metadaten                               |
 | `src/search_and_answer.py`         | Kernlogik des Chatbots: RAG-Session, FAISS-Suche, OpenAI-Integration                          |
 | `src/prompts.py`                   | Enthält die finalen Prompt-Varianten für den Chatbot                                          |
 | `src/api.py`                       | Flask-Testumgebung für den Web-Chatbot                                                       |
 | `tests/`                           | Testfälle und Analyse-Skripte für Evaluation                                                  |
-| `tests/test_cases/`                | 21 Fragen für Evaluation                                                |
+| `tests/testfälle.py`                | 21 Fragen für Evaluation                                                |
 | `tests/results/`                   | Beispieloutputs, Plots und Ergebnisse der Tests                                               |
 | `tests/analyse_best_config.py`     | Analysiert die besten Parameterkonfigurationen der Experimente                                |
 | `tests/analyse_results.py`         | Visualisiert Test- bzw. Experimentergebnisse                                    |
 | `tests/evaluation_manually.py`     | Skript für manuelle Bewertung von Antworten                                                  |
-| `tests/testfälle.py`               | Beispiel-Testfragen für automatische Evaluation                                               |
 | `OLD/`                             | Enthält ältere Versionen von Skripten und Experimenten                                        |
 | `OLD/api_old.py`                   | Alte Version der Flask-Testumgebung                                                         |
-| `OLD/chunk_articles_by_words.py`   | Alte Chunking-Variante nach Wortanzahl                                                       |
+| `OLD/chunk_articles_by_words.py`   | Alte Chunking-Variante nach Wortanzahl, wurde für erste Tests verwendet                      |
 | `OLD/run_tests_with_eval.py`       | Alte Testskripte für Evaluation                                                              |
 | `Frontend/`                         | Enthält die HTML-Datei für den Web-Chatbot                                                  |
-| `Frontend/chatbot.html`            | Frontend des Chatbots                                                                        |
+| `Frontend/chatbot.html`            | Code für Frontend des Chatbots                                                               |
 | `requirements.txt`                 | Listet alle Python-Abhängigkeiten für das Projekt                                             |
 | `README.md`                        | Projektbeschreibung, Setup-Anleitung und Nutzungshinweise                                    |
 | `.gitignore`                        | Enthält Regeln, welche Dateien/Ordner nicht ins Repository aufgenommen werden sollen         |
@@ -61,13 +60,14 @@ venv\Scripts\activate
 ```bash
 pip install -r requirements.txt
 ```
-5. OpenAI API-Key setzen (in .env):
+5. OpenAI API-Key setzen (in edu-i-chatbot/.env):
 
 OPENAI_API_KEY=sk-...
 
+
 ## Datenvorbereitung
 
-1. WordPress XML-Export die auch abgegeben wurde oder vom live Blog besorgen und  in data/ ablegen. Die Datei hat folgendes Format: (edu-ilab.WordPress.2025-10-07.xml)
+1. WordPress XML-Export (die auch abgegeben wurde) vom live Blog besorgen und  in data/ ablegen. Die Datei hat folgendes Format: (edu-ilab.WordPress.2025-10-07.xml)
 
 2. export_to_json ausführen – XML zu JSON:
 ```bash
@@ -75,7 +75,7 @@ python export_to_json.py
 ```
 - Ausgabe: data/articles_json/
 
-3. Preprocessing 2 ausführen – Bereinigung & Link-Extraktion:
+3. clean_articles ausführen – Bereinigung & Link-Extraktion:
 ```bash
 python clean_articles.py
 ```
@@ -83,15 +83,19 @@ python clean_articles.py
 
 ## Chunking und Indexierung
 
-Für Retrieval-augmented Generation (RAG) müssen Artikel in Chunks aufgeteilt werden, hierbei soll für die beste Perfomance die in der Dokumentation empfolene konviguration gewählt werden(chunk_articles_by_paragraph.py mit 0 overlap):
+Für Retrieval-augmented Generation (RAG) müssen Artikel in Chunks aufgeteilt werden, hierbei soll für die empfolene Konviguration gewählt werden(chunk_articles_by_paragraph.py mit 0 overlap). Der Name der Chunks ist nach der Konfiguration zu benennen z.B chunks_paragraph_no_overlap:
 
-- Absatzweise: chunk_articles_by_paragraph.py
+- Absatzweise: src/chunk_articles_by_paragraph.py
 
-- Nach Wortanzahl: chunk_articles_by_words.py
+- Nach Wortanzahl: OLD/chunk_articles_by_words.py
 
-- Rekursiv mit Überschneidungen: chunk_articles_recursive.py
+- Rekursiv mit Überschneidungen: src/chunk_articles_recursive.py
+```bash
+python chunk_articles_by_paragraph.py
+```
+-Ausgabe: data/clean_articles/chunks/Name der angegeben wurde in chunk_articles_by_paragraph.py (chunks_paragraph_no_overlap)
 
-Vektor-Datenbank erstellen, es muss darauf geachtet werden, dass die zuvor erstellten Chunks als Grundlage gewählt werden. Dies geschiet indem man den Namen des erstellten Chunkordners innerhalb von create_vector_db.py angibt (z.B. EXPERIMENT=):
+Vektor-Datenbank erstellen, es muss darauf geachtet werden, dass die zuvor erstellten Chunks als Grundlage gewählt werden. Dies geschiet indem man den Namen des erstellten Chunkordners innerhalb von create_vector_db.py angibt (z.B. EXPERIMENT=chunks_paragraph_no_overlap). Danach kann die Vektordatenbank erstellt werden:
 ```bash
 python create_vector_db.py
 ```
@@ -99,7 +103,7 @@ python create_vector_db.py
 
 ## Terminal-Test
 
-Direkte Nutzung der RAG-Session (zuerst kontrolliern unter EXPERIMENT die vorher erstellten chunks angegeben werden[EXPERIMENT = "chunks_paragraph_no_overlap" ]) dann im Terminal:
+Direkte Nutzung der RAG-Session, zuerst kontrolliern unter EXPERIMENT die vorher erstellten chunks angegeben werden(EXPERIMENT = "chunks_paragraph_no_overlap") dann im Terminal:
 ```bash
 python search_and_answer.py
 ```
@@ -115,41 +119,79 @@ Quellen:
 RAGChatSession unterstützt: Kontextbegrenzung, max. Nachrichten, Retry-Mechanismus bei API-Fehlern. Achtung die inline Quellen funktionieren nur im Frontend!
 
 Chat kann zurückgesetzt werden: session.reset()
-
-
-## Chatbot-API
-
-Falls eine lokale Testumgebung mit Flask aufgesetzt wurde kann hiermit der Chatbot im Frontend getestet werden:
-```bash
-python api.py
-```
-- Endpunkt: POST /ask
-
-## Evaluation und Tests
-
-Testfälle: tests/testcases2.json
-
-1. **Experiment auswählen:** In `search_and_answer.py` das gewünschte Experiment auswählen, das den entsprechenden Index in `data/indices/` nutzt. In `evaluation_manual.py` soll derselbe Experiment-Name angegeben werden.  
-2. **Backend starten:** Flask-App starten, dazu im Teminal python api.py ausführen.  
-3. **Fragen stellen und bewerten:** Skript `evaluation_manual.py` starten, eine Frage in Testumgebung eingeben um Session zu starten. Im Terminal wo api.py ausgeführt wird Session-ID auslesen und im terminal wo evaluation_manual ausgeführt wird eingeben . Fragen im Frontend stellen; das Skript wartet auf die Antwort und fordert im Terminal die manuelle Bewertung für Relevanz, Verständlichkeit, Korrektheit und Quellenqualität an. Die Antwortzeit wird automatisch erfasst.  
-4. **Speicherung:** Ergebnisse inkl. Gesamtscore werden fortlaufend in einer JSON-Datei gespeichert unter dem tests Ordner gespeichert. Die Resultate die gespeichert werden wollen in den tests/result ordner verschieben.  
-5. **Nächste Frage:** Nach der Bewertung die nächste Frage von testcases2 in Testumgebung eingeben; Skript läuft, bis es manuell mit `STRG+C` beendet wird.
-
-Ergebnisse werden im tests-Ordner abgelegt.
-
-## Visualisierung
-- Analysiert Endscore und Metriken über Experimente:
-```bash
-python results/analyze_results.py
-```
-- Ausgabe:
-
-- Balkendiagramm experiment_comparison.png
-
-## Prompt-Varianten
+### Prompt-Varianten
 
 FINAL_PROMPT_1 – detailliert, fokussiert auf Kontext und Quellen
 
 FINAL_PROMPT_2 – Chain-of-Thought Ansatz
 
 Wahl innerhalb von search_and_answer.py über final_prompt_variant=1|2.
+
+## Chatbot-API
+
+Falls eine lokale Testumgebung mit WordPress aufgesetzt wurde kann hiermit der Chatbot im Frontend getestet werden:
+```bash
+python api.py
+```
+- Endpunkt: POST /ask
+
+## Manuelle Evaluation der Testfälle
+
+1. **Experiment auswählen**
+   - In `evaluation_manually.py` den Namen der zu testenden Konfiguration angeben.
+   - Dieser Name **muss mit dem Experimentnamen** im Skript `search_and_answer.py` übereinstimmen, damit die richtigen Indizes und segmentierten JSON-Dokumente geladen werden.
+
+2. **Testumgebung starten**
+   - Lokale WordPress-Testumgebung starten.
+
+3. **API starten**
+   - `api.py` ausführen, um die Verbindung zwischen Frontend (Chatbot) und Backend herzustellen.
+
+4. **Testfälle in den Chatbot eingeben**
+   - Erste Frage aus `testfälle.py` oder dem Anforderungskatalog in das Eingabefeld des Chatbots kopieren.
+   - Dadurch wird eine neue Chat-Session gestartet.
+   - Im Terminal, in dem `api.py` läuft, die **Session-ID** ablesen.
+
+5. **Evaluation starten**
+   - Separates Terminal öffnen und `evaluation_manually.py` ausführen.
+   - Zu Beginn die zuvor ausgelesene **Session-ID** eingeben.
+
+6. **Kriterien bewerten**
+   - Im Terminal erscheint die erste Frage und das erste Bewertungskriterium.
+   - Passende Zahl (1–5) eingeben, um das Kriterium zu bewerten.
+   - Das Skript fährt automatisch mit dem nächsten Kriterium fort.
+   - Antworten im Chatbot prüfen, inkl. Verlinkungen.
+
+7. **Weitere Testfälle**
+   - Vorgang wiederholen: Frage in Chatbot kopieren → Kriterien bewerten → nächster Testfall.
+
+8. **Ergebnisse speichern**
+   - Die Bewertung wird automatisch in einer **JSON-Datei** unter `tests/` abgelegt.
+   - Nach Abschluss können die Dateien nach `tests/results/` verschoben werden, um eine strukturierte Übersicht zu erhalten.
+
+
+## Visualisierung
+- Analysiert Endscore über Experimente:
+```bash
+python results/analyze_results.py
+```
+- Ausgabe:
+
+- Balkendiagramm experiment_comparison.png auf dem zu sehen ist, welche Konfiguration die meisten Antworten mit Score >4.5 beantworten konnten.
+
+### Analyse einer Konfiguration
+- Analysiert eine Konfiguration auf Durchschnittswerte der Kriterien:
+```bash
+python results/analyse_best_config.py
+```
+- Ausgabe:
+
+- Balkendiagramm avg_scores_comparison.png auf dem zu sehen ist, welches Kriterum, welchen durchnittlichen Wert erreicht hat.
+
+## Frontend 
+
+Unter /Frontend/chatbot.html kann der HTML/CSS/JS Code für das Frontend des Chatbots betrachtet werden.
+
+## OLD
+
+Im Ordner "OLD" sind ältere Versionen oder Experimente des vorliegenden Code, die es nicht in die Arbeit geschafft haben abgelegt.

@@ -4,7 +4,7 @@ import json
 import os
 
 # Definition zentraler Metadaten zur Beschreibung des Experiments
-EXPERIMENT = "chunks_recursive_no_over"
+EXPERIMENT = "chunks_paragraph_no_overlap"
 OVERLAP = 0
 PROMPT_USED = "FINAL_PROMPT_2"
 
