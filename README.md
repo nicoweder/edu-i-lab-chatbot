@@ -104,7 +104,7 @@ python clean_articles.py
 Nun sind alle bereinigten Artikel in einem Strukturierten JSON-Dokument im /data Ordner und bereit für die Segmentierung.
 ## Chunking und Indexierung
 
-Für Retrieval-augmented Generation (RAG) müssen Artikel in Chunks aufgeteilt werden, hierbei soll für die empfolene Konviguration gewählt werden(chunk_articles_by_paragraph.py mit 0 overlap). Der Name der Chunks ist nach der Konfiguration zu benennen (default: chunks_paragraph_no_overlap). Die kann im jeweiligen Skript ganz oben erfolgen. Es wurden drei Varianten entwickelt, wobei nur das absatzbasierte Chunking empfohlen wird:
+Für Retrieval-augmented Generation (RAG) müssen Artikel in Chunks aufgeteilt werden, hierbei soll für die empfolene Konviguration gewählt werden(chunk_articles_by_paragraph.py mit 0 overlap). Der Name der Chunks ist nach der Konfiguration zu benennen (default: chunks_paragraph_no_overlap). Die kann im jeweiligen Skript ganz oben erfolgen. Es wurden zwei Varianten entwickelt, wobei nur das absatzbasierte Chunking empfohlen wird:
 
 - Absatzweise: src/chunk_articles_by_paragraph.py
 
