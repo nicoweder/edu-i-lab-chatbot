@@ -3,7 +3,7 @@ import json
 import os
 
 # Basisverzeichnis des Projekts
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Pfade zum XML-Export und Ausgabeordner (relativ zum Projektverzeichnis)
 XML_FILE = os.path.join(BASE_DIR, "data", "edu-ilab.WordPress.2025-10-07.xml")# Name hier anpassen falls neue .xml Datei

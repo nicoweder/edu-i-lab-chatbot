@@ -37,17 +37,24 @@ Dieses Projekt implementiert einen Chatbot für den Edu-I Lab Blog der Hochschul
 
 ## Installation
 
-1. **Python 3.10+ installieren**
+1. **Python 3.11.4 oder 3.12 installieren** Achtung: Bei zu neuen Versionen von Python kann es zu Problemen mit requirements kommen.
 
 2. Projekt klonen:
 ```bash
 git clone <https://github.com/nicoweder/edu-i-lab-chatbot>
 cd edu-i-lab-chatbot
 ```
-3. Virtuelle Umgebung erstellen und aktivieren:
+3. Virtuelle Umgebung erstellen:
 ```bash
 python -m venv venv
 ```
+Falls es Probleme mit Python gibt kann auch folgendes gemacht werden:
+```bash
+py -3.12 -m venv venv
+```
+Dabei ist zu beachten, dass "3.12" durch die aktuell auf Ihrem rechner installierte Version von Python (mit 3.12 und 3.11 funktionîeren alle requirements garantiert) zu ersetzen ist.
+
+4. Virtuelle Umgebung starten:
 Linux/macOS:
 ```bash
 source venv/bin/activate
@@ -60,50 +67,67 @@ venv\Scripts\activate
 ```bash
 pip install -r requirements.txt
 ```
-5. OpenAI API-Key setzen (edu-i-chatbot/.env Datei erstellen und Key angeben):
+5. OpenAI API-Key setzen (edu-i-chatbot/.env Datei erstellen und Key angeben). Dieser wurde aus Sicherheitsgründen nicht angegeben:
 
 OPENAI_API_KEY=sk-...
 
 
 ## Datenvorbereitung
 
-1. WordPress XML-Export (die auch abgegeben wurde) vom live Blog besorgen und  in data/ ablegen. Die Datei hat folgendes Format: (edu-ilab.WordPress.2025-10-07.xml)
+1. WordPress XML-Export vom live Blog besorgen falls man Aktuelle Daten möchte (oder die veraltete abgegebene Datei im data Ordner verwenden) und  in edu-i-chatbot/data ablegen. Die Datei hat folgendes Format: edu-ilab.WordPress.2025-10-07.xml 
 
-2. export_to_json ausführen – XML zu JSON:
+2. In richtiges Verzeichniss gehen:
+```bash
+cd .\src
+```
+
+3. export_to_json ausführen – XML zu JSON - Wurde eine neue XML-Datei hochgeladen, muss deren Name im export_to_json angegeben werden.
+Ausserdem ist darauf zu achten, dass veraltete Dateien, falls sie existieren zuerst aus data/articles_json/ gelöscht werden sollten.
 ```bash
 python export_to_json.py
 ```
 - Ausgabe: data/articles_json/
 
-3. clean_articles ausführen – Bereinigung & Link-Extraktion:
+4. clean_articles ausführen – Bereinigung & Link-Extraktion :
 ```bash
 python clean_articles.py
 ```
--Ausgabe: data/clean_articles/
+- Ausgabe: data/clean_articles/
 
+Nun sind alle bereinigten Artikel in einem Strukturierten JSON-Dokument im /data Ordner und bereit für die Segmentierung.
 ## Chunking und Indexierung
 
-Für Retrieval-augmented Generation (RAG) müssen Artikel in Chunks aufgeteilt werden, hierbei soll für die empfolene Konviguration gewählt werden(chunk_articles_by_paragraph.py mit 0 overlap). Der Name der Chunks ist nach der Konfiguration zu benennen z.B chunks_paragraph_no_overlap:
+Für Retrieval-augmented Generation (RAG) müssen Artikel in Chunks aufgeteilt werden, hierbei soll für die empfolene Konviguration gewählt werden(chunk_articles_by_paragraph.py mit 0 overlap). Der Name der Chunks ist nach der Konfiguration zu benennen (default: chunks_paragraph_no_overlap). Die kann im jeweiligen Skript ganz oben erfolgen. Es wurden drei Varianten entwickelt, wobei nur das absatzbasierte Chunking empfohlen wird:
 
 - Absatzweise: src/chunk_articles_by_paragraph.py
 
 - Nach Wortanzahl: OLD/chunk_articles_by_words.py
 
 - Rekursiv mit Überschneidungen: src/chunk_articles_recursive.py
+
+Möchte man das absatzbasierte chunking verwenden, führe folgendes im edu-i-chatbot/src Verzeichniss aus:
 ```bash
 python chunk_articles_by_paragraph.py
 ```
--Ausgabe: data/clean_articles/chunks/Name der angegeben wurde in chunk_articles_by_paragraph.py (chunks_paragraph_no_overlap)
+-Ausgabe: data/clean_articles/chunks/Name der angegeben wurde in chunk_articles_by_paragraph.py (default: chunks_paragraph_no_overlap)
 
-Vektor-Datenbank erstellen, es muss darauf geachtet werden, dass die zuvor erstellten Chunks als Grundlage gewählt werden. Dies geschiet indem man den Namen des erstellten Chunkordners innerhalb von create_vector_db.py angibt (z.B. EXPERIMENT=chunks_paragraph_no_overlap). Danach kann die Vektordatenbank erstellt werden:
+Alternativ kann auch die Rekursive Strategie versucht werden:
+```bash
+python chunk_articles_recursive.py
+```
+-Ausgabe: data/clean_articles/chunks/Name der angegeben wurde in chunk_articles_recursive.py (default: chunks_recursive_no_overlap)
+
+### Vektordatenbank erstellen
+Achtung: Dieser Schritt kann nur mit dem angegebenen OPENAI KEY in der edu-i-chatbot/.env Datei ausgeführt werden. 
+Beim erstellen der Vektordatenbank, muss darauf geachtet werden, dass die zuvor erstellten Chunks als Grundlage gewählt werden. Dies geschiet indem man den Namen des erstellten Chunkordners innerhalb von create_vector_db.py angibt (default:  EXPERIMENT=chunks_paragraph_no_overlap). Danach kann die Vektordatenbank erstellt werden:
 ```bash
 python create_vector_db.py
 ```
 - Erzeugt FAISS-Index und metadata.pkl für die RAG-Session.
 
 ## Terminal-Test
-
-Direkte Nutzung der RAG-Session, zuerst kontrolliern unter EXPERIMENT die vorher erstellten chunks angegeben werden(EXPERIMENT = "chunks_paragraph_no_overlap") dann im Terminal:
+Achtung: Dieser Schritt kann nur mit dem angegebenen OPENAI KEY in der edu-i-chatbot/.env Datei ausgeführt werden. 
+Direkte Nutzung der RAG-Session, zuerst kontrollieren ob unter EXPERIMENT die vorher erstellten chunks angegeben werden(EXPERIMENT = "chunks_paragraph_no_overlap") dann im Terminal:
 ```bash
 python search_and_answer.py
 ```
@@ -139,7 +163,7 @@ python api.py
 
 1. **Experiment auswählen**
    - In `evaluation_manually.py` den Namen der zu testenden Konfiguration angeben.
-   - Dieser Name **muss mit dem Experimentnamen** im Skript `search_and_answer.py` übereinstimmen, damit die richtigen Indizes und segmentierten JSON-Dokumente geladen werden.
+   - Dieser Name **soll mit dem Experimentnamen** im Skript `search_and_answer.py` übereinstimmen, um die Übersicht zu behalten.
 
 2. **Testumgebung starten**
    - Lokale WordPress-Testumgebung starten.
@@ -173,7 +197,7 @@ python api.py
 ## Visualisierung
 - Analysiert Endscore über Experimente:
 ```bash
-python results/analyze_results.py
+python tests/analyze_results.py
 ```
 - Ausgabe:
 
@@ -182,7 +206,7 @@ python results/analyze_results.py
 ### Analyse einer Konfiguration
 - Analysiert eine Konfiguration auf Durchschnittswerte der Kriterien:
 ```bash
-python results/analyse_best_config.py
+python tests/analyse_best_config.py
 ```
 - Ausgabe:
 
@@ -190,7 +214,7 @@ python results/analyse_best_config.py
 
 ## Frontend 
 
-Unter /Frontend/chatbot.html kann der HTML/CSS/JS Code für das Frontend des Chatbots betrachtet werden.
+Unter edu-i-chatbot/Frontend/chatbot.html kann der HTML/CSS/JS Code für das Frontend des Chatbots betrachtet werden.
 
 ## OLD
 
