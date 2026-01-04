@@ -63,7 +63,7 @@ class RAGChatSession:
         self.start_time = time.time()
         self.max_messages = max_messages
         self.context_char_limit = context_char_limit
-        self.final_prompt_variant = 2
+        self.final_prompt_variant = final_prompt_variant
 
     def reset(self):
         """
