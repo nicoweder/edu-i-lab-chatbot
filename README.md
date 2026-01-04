@@ -23,10 +23,6 @@ Dieses Projekt implementiert einen Chatbot für den Edu-I Lab Blog der Hochschul
 | `tests/analyse_best_config.py`     | Analysiert die besten Parameterkonfigurationen der Experimente                                |
 | `tests/analyse_results.py`         | Visualisiert Test- bzw. Experimentergebnisse                                    |
 | `tests/evaluation_manually.py`     | Skript für manuelle Bewertung von Antworten                                                  |
-| `OLD/`                             | Enthält ältere Versionen von Skripten und Experimenten                                        |
-| `OLD/api_old.py`                   | Alte Version der Flask-Testumgebung                                                         |
-| `OLD/chunk_articles_by_words.py`   | Alte Chunking-Variante nach Wortanzahl, wurde für erste Tests verwendet                      |
-| `OLD/run_tests_with_eval.py`       | Alte Testskripte für Evaluation                                                              |
 | `Frontend/`                         | Enthält die HTML-Datei für den Web-Chatbot                                                  |
 | `Frontend/chatbot.html`            | Code für Frontend des Chatbots                                                               |
 | `requirements.txt`                 | Listet alle Python-Abhängigkeiten für das Projekt                                             |
@@ -45,6 +41,7 @@ git clone <https://github.com/nicoweder/edu-i-lab-chatbot>
 cd edu-i-lab-chatbot
 ```
 3. Virtuelle Umgebung erstellen:
+- Standard:
 ```bash
 python -m venv venv
 ```
@@ -52,22 +49,32 @@ Falls es Probleme mit Python gibt kann auch folgendes gemacht werden:
 ```bash
 py -3.12 -m venv venv
 ```
-Dabei ist zu beachten, dass "3.12" durch die aktuell auf Ihrem rechner installierte Version von Python (mit 3.12 und 3.11 funktionîeren alle requirements garantiert) zu ersetzen ist.
+Hinweis: "3.12" durch die auf Ihrem Rechner installierte Version ersetzen. Alle Anforderungen funktionieren garantiert mit Python 3.11 oder 3.12.
 
+Mac/Linux Hinweis: Falls python noch auf Python 2 verweist, stattdessen python3 verwenden:
+```bash
+python3 -m venv venv
+```
 4. Virtuelle Umgebung starten:
 Linux/macOS:
 ```bash
 source venv/bin/activate
 ```
-Windows:
+Windows Powershell:
 ```bash
-venv\Scripts\activate
+venv\Scripts\Activate.ps1
 ```
-4. Abhängigkeiten installieren:
+
+Windows CMD:
 ```bash
+venv\Scripts\activate.bat
+```
+5. Abhängigkeiten installieren:
+```bash
+pip install --upgrade pip
 pip install -r requirements.txt
 ```
-5. OpenAI API-Key setzen (edu-i-chatbot/.env Datei erstellen und Key angeben). Dieser wurde aus Sicherheitsgründen nicht angegeben:
+6. OpenAI API-Key setzen (edu-i-chatbot/.env Datei erstellen und Key angeben). Dieser wurde aus Sicherheitsgründen nicht angegeben:
 
 OPENAI_API_KEY=sk-...
 
@@ -101,21 +108,19 @@ Für Retrieval-augmented Generation (RAG) müssen Artikel in Chunks aufgeteilt w
 
 - Absatzweise: src/chunk_articles_by_paragraph.py
 
-- Nach Wortanzahl: OLD/chunk_articles_by_words.py
-
 - Rekursiv mit Überschneidungen: src/chunk_articles_recursive.py
 
 Möchte man das absatzbasierte chunking verwenden, führe folgendes im edu-i-chatbot/src Verzeichniss aus:
 ```bash
 python chunk_articles_by_paragraph.py
 ```
--Ausgabe: data/clean_articles/chunks/Name der angegeben wurde in chunk_articles_by_paragraph.py (default: chunks_paragraph_no_overlap)
+- Ausgabe: data/clean_articles/chunks/Name der angegeben wurde in chunk_articles_by_paragraph.py (default: chunks_paragraph_no_overlap)
 
 Alternativ kann auch die Rekursive Strategie versucht werden:
 ```bash
 python chunk_articles_recursive.py
 ```
--Ausgabe: data/clean_articles/chunks/Name der angegeben wurde in chunk_articles_recursive.py (default: chunks_recursive_no_overlap)
+- Ausgabe: data/clean_articles/chunks/Name der angegeben wurde in chunk_articles_recursive.py (default: chunks_recursive_no_overlap)
 
 ### Vektordatenbank erstellen
 Achtung: Dieser Schritt kann nur mit dem angegebenen OPENAI KEY in der edu-i-chatbot/.env Datei ausgeführt werden. 
@@ -216,6 +221,3 @@ python tests/analyse_best_config.py
 
 Unter edu-i-chatbot/Frontend/chatbot.html kann der HTML/CSS/JS Code für das Frontend des Chatbots betrachtet werden.
 
-## OLD
-
-Im Ordner "OLD" sind ältere Versionen oder Experimente des vorliegenden Code, die es nicht in die Arbeit geschafft haben abgelegt.
